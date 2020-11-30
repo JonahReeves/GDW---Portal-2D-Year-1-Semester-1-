@@ -285,39 +285,6 @@ static unsigned int square(b2World* m_physicsWorld, float shapex, float shapey, 
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
 		return entityS;
 	}
-	//Trigger
-	{
-		auto entity = ECS::CreateEntity();
-
-		//Add components
-		ECS::AttachComponent<Transform>(entity);
-		ECS::AttachComponent<PhysicsBody>(entity);
-		ECS::AttachComponent<Trigger*>(entity);
-		ECS::AttachComponent<Sprite>(entity);
-
-		//Sets up components
-		std::string fileName = "GreenSquare.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 45, 45);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 80.f));
-		ECS::GetComponent<Trigger*>(entity) = new DestroyTrigger();
-		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
-		ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(puzzleWall);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-
-		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
-
-		float shrinkX = 0.f;
-		float shrinkY = 0.f;
-		b2Body* tempBody;
-		b2BodyDef tempDef;
-		tempDef.type = b2_staticBody;
-		tempDef.position.Set(float32(shapex), float32(shapey));
-
-		tempBody = m_physicsWorld->CreateBody(&tempDef);
-
-		tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER | OBJECTS);
-		tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
-	}
 }
 
 void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
@@ -490,6 +457,11 @@ void PhysicsPlayground::KeyboardDown()
 {
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
+	float playerx, playery, squarepositionx, squarepositiony;
+	playerx = ECS::GetComponent<Transform>(playerid).GetPositionX();
+	playery = ECS::GetComponent<Transform>(playerid).GetPositionY();
+	squarepositionx = ECS::GetComponent<Transform>(square1id).GetPositionX();
+	squarepositiony = ECS::GetComponent<Transform>(square1id).GetPositionY();
 
 	if (Input::GetKeyDown(Key::T))
 	{
@@ -505,7 +477,7 @@ void PhysicsPlayground::KeyboardDown()
 		}
 	}
 
-	if (Input::GetKeyDown(Key::E))
+	if (Input::GetKeyDown(Key::E) && playerx > (squarepositionx - 30) && playerx < (squarepositionx + 30) && playery >(squarepositiony - 30) && playery < (squarepositiony + 30))
 	{
 		squarepickup = true;
 	}
@@ -525,9 +497,11 @@ void PhysicsPlayground::Update()
 {
 	auto& square1 = ECS::GetComponent<PhysicsBody>(square1id);
 
-	float playerx, playery;
+	float playerx, playery, square1x, square1y;
 	playerx = ECS::GetComponent<Transform>(playerid).GetPositionX();
 	playery = ECS::GetComponent<Transform>(playerid).GetPositionY();
+	square1x = ECS::GetComponent<Transform>(square1id).GetPositionX();
+	square1y = ECS::GetComponent<Transform>(square1id).GetPositionY();
 
 	if (squarepickup) {
 		square1.SetPosition(b2Vec2(playerx + 30, playery));
