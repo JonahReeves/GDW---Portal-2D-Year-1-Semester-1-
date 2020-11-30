@@ -29,4 +29,9 @@ protected:
 	int expander1 = 0;
 	int wall = 0;
 	int spinner = 0;
+	int puzzleWall1;
+	int puzzleWall2;
+	int puzzleWall3;
+	int puzzleWall4;
+	int puzzleWall5;
 };
