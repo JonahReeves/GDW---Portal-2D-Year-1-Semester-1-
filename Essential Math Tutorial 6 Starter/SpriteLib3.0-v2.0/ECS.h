@@ -51,6 +51,7 @@ public:
 	//Side stuff for entity identifier
 	static void SetIsMainCamera(unsigned entity, bool mainCamera);
 	static void SetIsMainPlayer(unsigned entity, bool mainPlayer);
+	static void SetPortalGun(unsigned entity, bool portalGun);
 
 private:
 	static entt::registry* m_reg;

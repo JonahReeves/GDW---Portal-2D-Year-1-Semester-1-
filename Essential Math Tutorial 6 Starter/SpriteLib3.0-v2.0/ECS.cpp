@@ -47,3 +47,11 @@ void ECS::SetIsMainPlayer(unsigned entity, bool mainPlayer)
 		MainEntities::MainPlayer(entity);
 	}
 }
+
+void ECS::SetPortalGun(unsigned entity, bool portalGun)
+{
+	if (portalGun)
+	{
+		MainEntities::PortalGun(entity);
+	}
+}
