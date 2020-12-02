@@ -70,7 +70,7 @@ int PhysicsPlayground::staticBasicPlat(std::string file, int fileLength, int fil
 	
 }
 
-int PhysicsPlayground::dynamicPlat(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg)
+int PhysicsPlayground::dynamicPlat(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg, float gravityScale)
 {
 	auto entity = ECS::CreateEntity();
 	//Add components
@@ -98,10 +98,10 @@ int PhysicsPlayground::dynamicPlat(std::string file, int fileLength, int fileWid
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 
-	tempPhsBody = PhysicsBody(entity, tempBody,  float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, GROUND | ENVIRONMENT | PLAYER | TRIGGER, 0.3f);
+	tempPhsBody = PhysicsBody(entity, tempBody,  float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, GROUND | ENVIRONMENT | PLAYER | TRIGGER | OBJECTS, 0.3f);
 
 	tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
-	tempPhsBody.SetGravityScale(0.f);
+	tempPhsBody.SetGravityScale(gravityScale);
 	return entity;
 }
 
@@ -212,7 +212,7 @@ int PhysicsPlayground::basicTranslateTrigger(std::string file, int fileLength, i
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 
-	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER | OBJECTS);
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, OBJECTS, ENVIRONMENT | OBJECTS, ENEMY);
 	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 	tempPhsBody.SetRotationAngleDeg(rotationAngleDeg);
 	return entity;
@@ -258,21 +258,20 @@ static unsigned int square(b2World* m_physicsWorld, float shapex, float shapey, 
 {
 	{
 	//Square
-
-	auto entityS = ECS::CreateEntity();
+	auto entity = ECS::CreateEntity();
 	//Add components
-	ECS::AttachComponent<Sprite>(entityS);
-	ECS::AttachComponent<Transform>(entityS);
-	ECS::AttachComponent<PhysicsBody>(entityS);
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
 
 	//Sets up the components
 	std::string fileName = "BoxBlock.png";
-	ECS::GetComponent<Sprite>(entityS).LoadSprite(fileName, shapew, shapeh);
-	ECS::GetComponent<Sprite>(entityS).SetTransparency(1.f);
-	ECS::GetComponent<Transform>(entityS).SetPosition(vec3(45.f, -8.f, 3.f));
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, shapew, shapeh);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(45.f, -8.f, 3.f));
 
-	auto& tempSpr = ECS::GetComponent<Sprite>(entityS);
-	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entityS);
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
 
 	float shrinkX = 0.f;
 	float shrinkY = 0.f;
@@ -284,10 +283,10 @@ static unsigned int square(b2World* m_physicsWorld, float shapex, float shapey, 
 
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-	tempPhsBody = PhysicsBody(entityS, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, OBJECTS, GROUND | ENVIRONMENT | PLAYER | TRIGGER, 0.3f);
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, OBJECTS, GROUND | ENVIRONMENT | PLAYER | TRIGGER, 0.3f);
 
 	tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
-	return entityS;
+	return entity;
 	}
 }
 
@@ -354,7 +353,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		b2Body* tempBody;
 		b2BodyDef tempDef;
 		tempDef.type = b2_dynamicBody;
-		tempDef.position.Set(float32(0.f), float32(0.f)); //3100 -320
+		tempDef.position.Set(float32(-30.f), float32(0.f)); //3100 -320
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -401,19 +400,24 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, OBJECTS, GROUND | ENVIRONMENT | PLAYER | TRIGGER, 0.3f);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, OBJECTS, ENVIRONMENT, 0.3f);
 
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
+		tempPhsBody.SetFixedRotation(false);
 		tempPhsBody.SetRotationAngleDeg(0.f);
 	}
 	
 	// TESTING PLATFORMS--------------------------------------------------------------------------------------------
 	{
-		startingPlat = staticBasicPlat("boxSprite.jpg", 225, 10, 30, -10, 2);
+		square1id = square(m_physicsWorld, 30.f, 0.f, 20, 20, puzzleWall1);
 
-		square1id = square(m_physicsWorld, 60.f, 0.f, 20, 20, puzzleWall1);
+		startingPlat = staticBasicPlat("boxSprite.jpg", 225, 10, 30, -10, 2);
+		staticBasicPlat("boxSprite.jpg", 150, 10, 80, 100, 2); //platform above moving door
+		int movingPlat = dynamicPlat("boxSprite.jpg", 10, 50, 120, 40, 2, 0.0f, 0.01f);
+		staticBasicPlat("boxSprite.jpg", 10, 50, 109, 60, 2);
+		staticBasicPlat("boxSprite.jpg", 10, 50, 131, 60, 2);
+		int upTranslateTrigger = basicTranslateTrigger("boxSprite.jpg", 20, 10, 40, 0, 3, 2, movingPlat, 25000);
 	}
-	
 	
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
@@ -438,7 +442,6 @@ void PhysicsPlayground::KeyboardHold()
 	{
 		speed *= 5.f;
 	}
-
 	if (Input::GetKey(Key::A))
 	{
 		player.GetBody()->ApplyForceToCenter(b2Vec2(-400000.f * speed, 0.f), true);
@@ -494,12 +497,12 @@ void PhysicsPlayground::KeyboardDown()
 		squarepickup = true;
 	}
 
-	if (Input::GetKey(Key::M))
+	if (Input::GetKeyDown(Key::UpArrow))
 	{
 		pgangleup = true;
 	}
 
-	if (Input::GetKey(Key::N))
+	if (Input::GetKeyDown(Key::DownArrow))
 	{
 		pgangledown = true;
 	}
@@ -513,19 +516,23 @@ void PhysicsPlayground::KeyboardUp()
 		squarepickup = false;
 	}
 
-	if (Input::GetKey(Key::M))
+	if (Input::GetKeyUp(Key::UpArrow))
 	{
 		pgangleup = false;
+		pgangledown = false;
 	}
 
-	if (Input::GetKey(Key::N))
+	if (Input::GetKeyUp(Key::DownArrow))
 	{
+		pgangleup = false;
 		pgangledown = false;
 	}
 }
 
 void PhysicsPlayground::Update()
 {
+	using namespace std;
+
 	auto& square1 = ECS::GetComponent<PhysicsBody>(square1id);
 	auto& portalgun = ECS::GetComponent<PhysicsBody>(portalgunid);
 	auto& player = ECS::GetComponent<PhysicsBody>(playerid);
@@ -536,18 +543,20 @@ void PhysicsPlayground::Update()
 	square1x = ECS::GetComponent<Transform>(square1id).GetPositionX();
 	square1y = ECS::GetComponent<Transform>(square1id).GetPositionY();
 
-	portalgunangle = ECS::GetComponent<Transform>(portalgunid).GetRotationAngleY();
+	portalgunangle = portalgun.GetRotationAngleDeg();
 
 	if (squarepickup) {
 		square1.SetPosition(b2Vec2(playerx + 30, playery));
 	}
 	portalgun.SetPosition(b2Vec2(playerx + 10, playery));
-	//player.SetPosition(b2Vec2(playerx + 0, playery));
 
 	if (pgangleup) {
-		portalgun.SetRotationAngleDeg(portalgunangle + 20.f);
+		portalgun.SetRotationAngleDeg(portalgunangle + 2.f);
 	}
 	else if (pgangledown) {
-		portalgun.SetRotationAngleDeg(portalgunangle - 20.f);
+		portalgun.SetRotationAngleDeg(portalgunangle - 2.f);
+	}
+	else if (!pgangleup && !pgangledown) {
+		portalgun.SetRotationAngleDeg(portalgunangle);
 	}
 }
