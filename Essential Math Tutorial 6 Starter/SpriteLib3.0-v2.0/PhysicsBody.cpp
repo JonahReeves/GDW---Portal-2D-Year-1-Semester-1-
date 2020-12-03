@@ -3,6 +3,8 @@
 bool PhysicsBody::m_drawBodies = false;
 std::vector<int> PhysicsBody::m_bodiesToDelete;
 
+
+
 PhysicsBody::PhysicsBody(int entity, b2Body * body, float radius, vec2 centerOffset, bool sensor, EntityCategories category, int collidesWith, float friction, float density)
 {
 	//Bodies don't reference a shape by themselves
@@ -252,10 +254,18 @@ void PhysicsBody::SetBodyType(BodyType type)
 }
 
 
-void PhysicsBody::SetPosition(b2Vec2 bodyPos)
+void PhysicsBody::SetPosition(b2Vec2 bodyPos, bool contactStep)
 {
-	//Body transform
-	m_body->SetTransform(bodyPos, m_body->GetAngle());
+	if (!contactStep)
+	{
+		//Body transform
+		m_body->SetTransform(bodyPos, m_body->GetAngle());
+	}
+	else
+	{
+		moveLater = true;
+		moveValue = bodyPos;
+	}
 }
 
 void PhysicsBody::SetVelocity(vec3 velo)

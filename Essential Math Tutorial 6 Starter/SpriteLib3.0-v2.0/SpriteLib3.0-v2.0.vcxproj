@@ -170,6 +170,7 @@
     <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="PixelateEffect.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PortalTrigger.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="RenderingSystem.h" />
     <ClInclude Include="Scene.h" />
@@ -228,6 +229,7 @@
     <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="PixelateEffect.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PortalTrigger.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="RenderingSystem.cpp" />
     <ClCompile Include="Scene.cpp" />

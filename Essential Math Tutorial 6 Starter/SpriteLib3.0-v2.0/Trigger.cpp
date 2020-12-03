@@ -11,12 +11,14 @@ void Trigger::OnTrigger()
 void Trigger::OnEnter()
 {	//Tests the trigger working and displays using T
 	ECS::GetComponent<PhysicsBody>(m_triggerEntity).SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+	
 }
 
 void Trigger::OnExit()
 {
-	//make the object linked opaque
+	//make the object linked red
 	ECS::GetComponent<PhysicsBody>(m_triggerEntity).SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+	
 }
 
 void Trigger::SetTriggerEntity(int triggerEnt)

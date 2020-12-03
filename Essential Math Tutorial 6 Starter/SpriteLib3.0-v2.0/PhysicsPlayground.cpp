@@ -1,6 +1,7 @@
 #include "PhysicsPlayground.h"
 #include "Utilities.h"
 #include "TranslateTrigger.h"
+#include "PortalTrigger.h"
 #include <string>
 #include <stdlib.h>
 
@@ -18,7 +19,7 @@ PhysicsPlayground::PhysicsPlayground(std::string name)
 
 static unsigned int playerid;
 
-int startingPlat;
+
 int movingPlat;
 int holderPlat;
 int movingPlatStopper;
@@ -217,6 +218,46 @@ int PhysicsPlayground::basicTranslateTrigger(std::string file, int fileLength, i
 	tempPhsBody.SetRotationAngleDeg(rotationAngleDeg);
 	return entity;
 }
+
+int PhysicsPlayground::basicPortal(float xVal, float yVal, float rotationAngleDeg)
+{
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	ECS::AttachComponent<Trigger*>(entity);
+
+	//Sets up components
+	std::string fileName = "BluePortal.png";
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 5, 40);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(xVal, yVal, 10));
+	ECS::GetComponent<Trigger*>(entity) = new PortalTrigger();
+	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+	ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(playerid);
+
+
+
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(xVal), float32(yVal));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER | OBJECTS);
+	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+	tempPhsBody.SetRotationAngleDeg(rotationAngleDeg);
+	return entity;
+}
 int PhysicsPlayground::boulder(int fileLength, int fileWidth, float xVal, float yVal, int rotation)
 
 	{ //BOULDER
@@ -409,14 +450,18 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	
 	// TESTING PLATFORMS--------------------------------------------------------------------------------------------
 	{
-		square1id = square(m_physicsWorld, 30.f, 0.f, 20, 20, puzzleWall1);
+		square1id = square(m_physicsWorld, 120.f, 0.f, 20, 20, puzzleWall1);
 
-		startingPlat = staticBasicPlat("boxSprite.jpg", 225, 10, 30, -10, 2);
-		staticBasicPlat("boxSprite.jpg", 150, 10, 80, 100, 2); //platform above moving door
-		int movingPlat = dynamicPlat("boxSprite.jpg", 10, 50, 120, 40, 2, 0.0f, 0.01f);
-		staticBasicPlat("boxSprite.jpg", 10, 50, 109, 60, 2);
-		staticBasicPlat("boxSprite.jpg", 10, 50, 131, 60, 2);
-		int upTranslateTrigger = basicTranslateTrigger("boxSprite.jpg", 20, 10, 40, 0, 3, 2, movingPlat, 25000);
+		int startingPlat = staticBasicPlat("boxSprite.jpg", 225, 10, 30, -10, 2);
+		int testPortal = basicPortal(70, 20);
+		/*{
+			staticBasicPlat("boxSprite.jpg", 150, 10, 80, 100, 2); //platform above moving door
+			int movingPlat = dynamicPlat("boxSprite.jpg", 10, 50, 120, 40, 2, 0.0f, 0.01f);
+			staticBasicPlat("boxSprite.jpg", 10, 50, 109, 60, 2);
+			staticBasicPlat("boxSprite.jpg", 10, 50, 131, 60, 2);
+			int upTranslateTrigger = basicTranslateTrigger("boxSprite.jpg", 20, 10, 40, 0, 3, 2, movingPlat, 25000);
+		}*/
+		
 	}
 	
 
@@ -492,7 +537,7 @@ void PhysicsPlayground::KeyboardDown()
 		}
 	}
 
-	if (Input::GetKeyDown(Key::E) && playerx > (squarepositionx - 30) && playerx < (squarepositionx + 30) && playery > (squarepositiony - 30) && playery < (squarepositiony + 30))
+	if (Input::GetKeyDown(Key::E) && playerx > (squarepositionx - 30) && playerx < (squarepositionx + 30) && playery > (squarepositiony - 30) && playery < (squarepositiony + 30)) //only picks up the square if its within 30 units of it
 	{
 		squarepickup = true;
 	}
@@ -546,9 +591,9 @@ void PhysicsPlayground::Update()
 	portalgunangle = portalgun.GetRotationAngleDeg();
 
 	if (squarepickup) {
-		square1.SetPosition(b2Vec2(playerx + 30, playery));
+		//square1.SetPosition(b2Vec2(playerx + 30, playery));
 	}
-	portalgun.SetPosition(b2Vec2(playerx + 10, playery));
+	//portalgun.SetPosition(b2Vec2(playerx + 10, playery)); //update portal gun position
 
 	if (pgangleup) {
 		portalgun.SetRotationAngleDeg(portalgunangle + 2.f);

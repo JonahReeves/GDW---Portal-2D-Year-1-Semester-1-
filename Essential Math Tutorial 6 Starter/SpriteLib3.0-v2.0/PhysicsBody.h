@@ -112,7 +112,7 @@ public:
 
 
 	//Set position (just sets the variable, doesn't actually set the position)
-	void SetPosition(b2Vec2 bodyPos);
+	void SetPosition(b2Vec2 bodyPos, bool contactStep);
 	//Sets the velocity of the phyiscs body
 	void SetVelocity(vec3 velo);
 	//Sets the gravity scale of the physics body
@@ -162,6 +162,9 @@ private:
 	//Width and height of the body
 	float m_width = 0.f;
 	float m_height = 0.f;
+
+	bool moveLater = false;
+	b2Vec2 moveValue = b2Vec2(0.f, 0.f);
 	
 
 	//Do you draw the bodies?
