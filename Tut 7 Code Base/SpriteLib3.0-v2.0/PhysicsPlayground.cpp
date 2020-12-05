@@ -181,6 +181,8 @@ void PhysicsPlayground::orangePortal(float xVal, float yVal, float rotationAngle
 	oPortal = entity;
 }
 
+//Methods here
+
 void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 {
 	//Dynamically allocates the register
