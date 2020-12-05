@@ -7,6 +7,10 @@ void bPortalTrigger::OnEnter() //teleport user
 {
 	Trigger::OnEnter();
 
+	//On enter, check through a global array of entities (players and cubes) and compare their locations with the location of this portal
+	//Test to see if they are touching, if yes, set as targetEntity
+	//teleport target entity as done below
+
 	//if (!triggered)
 	{
 		for (int i = 0; i < m_targetEntities.size(); i++)
@@ -29,4 +33,12 @@ void bPortalTrigger::OnEnter() //teleport user
 void bPortalTrigger::OnExit() // literally do nothing
 {
 	Trigger::OnExit();
+
 }
+/* 
+bool isactive
+
+when player goes through entrance portal, exit portal's isactive is set to false, (need a setter method that other portal can access)
+teleport function on any portal only triggers when isactive is true
+when player leaves hitbox of exit portal, set isactive to true once more, making the portal work again, no more infinite teleport glitch
+*/
