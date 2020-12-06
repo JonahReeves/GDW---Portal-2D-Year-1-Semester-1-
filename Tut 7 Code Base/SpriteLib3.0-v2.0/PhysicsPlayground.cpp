@@ -9,6 +9,7 @@
 int playerId;
 int bPortal;
 int oPortal;
+int projectile;
 
 static unsigned int square1id;
 static unsigned int portalgunid;
