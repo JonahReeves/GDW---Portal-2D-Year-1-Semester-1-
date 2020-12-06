@@ -2,6 +2,7 @@
 #include "Utilities.h"
 #include "bPortalTrigger.h"
 #include "oPortalTrigger.h"
+#include "FirePortal.h"
 
 #include <random>
 
