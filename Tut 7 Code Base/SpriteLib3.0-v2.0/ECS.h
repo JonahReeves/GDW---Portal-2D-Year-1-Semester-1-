@@ -13,6 +13,8 @@
 #include "DestroyTrigger.h"
 #include "TranslateTrigger.h"
 #include "HorizontalScroll.h"
+#include "bPortalSpawnTrigger.h"
+#include "oPortalSpawnTrigger.h"
 #include "CanJump.h"
 
 
