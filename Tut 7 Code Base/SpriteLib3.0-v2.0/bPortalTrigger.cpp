@@ -7,7 +7,7 @@ void bPortalTrigger::OnEnter() //teleport user
 {
 	Trigger::OnEnter();
 
-	//if (!triggered)
+	if (active)
 	{
 		for (int i = 0; i < m_targetEntities.size(); i++)
 		{
@@ -18,7 +18,11 @@ void bPortalTrigger::OnEnter() //teleport user
 
 		}
 
+		auto &t = ECS::GetComponent<Trigger*>(PhysicsPlayground::getOrangePortal());
+		t->active = false;
+
 		triggered = true;
+		
 	}
 
 	//Find out whats touching the portal, add it to target entities
@@ -28,5 +32,6 @@ void bPortalTrigger::OnEnter() //teleport user
 }
 void bPortalTrigger::OnExit() // literally do nothing
 {
+	active = true;
 	Trigger::OnExit();
 }

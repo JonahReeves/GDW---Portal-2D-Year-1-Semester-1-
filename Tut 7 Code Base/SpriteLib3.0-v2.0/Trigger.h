@@ -16,6 +16,7 @@ public:
 	void AddTargetEntity(int entity);
 	void SetTargetEntities(std::vector<int> entities);
 	std::vector<int> GetTargetEntities();
+	bool active = true;
 protected:
 	int m_triggerEntity;
 	std::vector<int> m_targetEntities;
