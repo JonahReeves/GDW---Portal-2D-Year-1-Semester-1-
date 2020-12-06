@@ -225,7 +225,7 @@ int PhysicsPlayground::dynamicPlat(std::string file, int fileLength, int fileWid
 	return entity;
 }
 
-static unsigned int dynamicProj(b2World* m_physicsWorld, std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg, float gravityScale, int& projectile)
+static unsigned int dynamicProj(b2World* &m_physicsWorld, std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg, float gravityScale, int& projectile)
 {
 	auto entity = ECS::CreateEntity();
 	//Add components
