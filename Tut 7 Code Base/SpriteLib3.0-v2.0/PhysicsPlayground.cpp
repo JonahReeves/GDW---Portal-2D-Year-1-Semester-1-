@@ -245,7 +245,9 @@ int PhysicsPlayground::dynamicPlat(std::string file, int fileLength, int fileWid
 
 int PhysicsPlayground::dynamicProj(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg)
 {
+	
 	auto entity = ECS::CreateEntity();
+	projectile = entity;
 	//Add components
 	ECS::AttachComponent<Sprite>(entity);
 	ECS::AttachComponent<Transform>(entity);
@@ -724,6 +726,7 @@ void PhysicsPlayground::KeyboardDown()
 {
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
+	auto& projectile_travel = ECS::GetComponent<PhysicsBody>(projectile);
 	float playerx, playery, squarepositionx, squarepositiony;
 	playerx = ECS::GetComponent<Transform>(playerId).GetPositionX();
 	playery = ECS::GetComponent<Transform>(playerId).GetPositionY();
@@ -762,7 +765,7 @@ void PhysicsPlayground::KeyboardDown()
 	{
 		
 		dynamicProj("boxSprite.jpg", 5, 5, playerx, playery, 2);
-
+		projectile_travel.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(16000.f, 0.f), true);
 	}
 }
 
