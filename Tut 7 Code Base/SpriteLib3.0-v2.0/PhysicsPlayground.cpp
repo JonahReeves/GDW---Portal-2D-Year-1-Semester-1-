@@ -567,11 +567,12 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	{
 		square1id = square(m_physicsWorld, 30.f, 0.f, 20, 20, puzzleWall1);
 
-		kinematicPlat("boxSprite.jpg", 150, 10, 80, 100, 2); //platform above moving door //staticplat
+		/*kinematicPlat("boxSprite.jpg", 150, 10, 80, 100, 2); //platform above moving door //staticplat
 		int movingPlat = dynamicPlat("boxSprite.jpg", 10, 50, 120, 40, 2, 0.0f, 0.01f);
 		kinematicPlat("boxSprite.jpg", 10, 50, 109, 60, 2); //staticplat
 		kinematicPlat("boxSprite.jpg", 10, 50, 131, 60, 2); //staticplat
 		int upTranslateTrigger = translateTrigger("boxSprite.jpg", 20, 10, 40, 0, 3, 2, movingPlat, 25000);
+		*/
 	}
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
