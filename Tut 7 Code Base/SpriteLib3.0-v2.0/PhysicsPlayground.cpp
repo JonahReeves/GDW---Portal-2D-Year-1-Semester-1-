@@ -454,11 +454,16 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 		ECS::AttachComponent<PhysicsBody>(entity);
 		ECS::AttachComponent<CanJump>(entity);
+		ECS::AttachComponent<Player>(entity);
+		ECS::AttachComponent<AnimationController>(entity);
 
-		//Sets up the components
-		std::string fileName = "LinkStandby.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 40, 30);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		//sets up the components
+		std::string fileName = "spritesheets/Atlas.png";
+		std::string animations = "atlasAnimations.json";
+
+		ECS::GetComponent<Player>(entity).InitPlayer(fileName, animations, 30, 30, &ECS::GetComponent<Sprite>(entity),
+			&ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity));
+
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 30.f, 2.f));
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
@@ -927,7 +932,7 @@ void PhysicsPlayground::Update()
 	square1x = ECS::GetComponent<Transform>(square1id).GetPositionX();
 	square1y = ECS::GetComponent<Transform>(square1id).GetPositionY();
 
-
+	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
 
 	if (squarepickup) {
 		square1.SetPosition(b2Vec2(playerx + 30, playery));

@@ -3,13 +3,12 @@
 
 #include "BackEnd.h"
 
-#define TOPDOWN
 
 enum AnimEnums
 {
 	IDLELEFT,
 	IDLERIGHT,
-	
+
 	//Only in Top down
 #ifdef TOPDOWN
 	IDLEUP,
@@ -24,7 +23,16 @@ enum AnimEnums
 	WALKUP,
 	WALKDOWN,
 #endif
-	
+
+	RUNLEFT,
+	RUNRIGHT,
+
+	//Only in Top down
+#ifdef TOPDOWN
+	RUNUP,
+	RUNDOWN,
+#endif
+
 	ATTACKLEFT,
 	ATTACKRIGHT,
 
@@ -40,12 +48,14 @@ enum AnimTypes
 #ifdef TOPDOWN
 	IDLE = 0,
 	WALK = 4,
-	ATTACK = 8
+	RUN = 8,
+	ATTACK = 12
 #endif
 #ifndef TOPDOWN
 	IDLE = 0,
 	WALK = 2,
-	ATTACK = 4
+	RUN = 4,
+	ATTACK = 6
 #endif
 };
 
@@ -64,10 +74,10 @@ class Player
 {
 public:
 	Player();
-	Player(std::string& fileName, std::string& animationJSON, int width, int height, 
+	Player(std::string& fileName, std::string& animationJSON, int width, int height,
 		Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);
 
-	void InitPlayer(std::string& fileName, std::string& animationJSON, int width, int height, 
+	void InitPlayer(std::string& fileName, std::string& animationJSON, int width, int height,
 		Sprite* sprite, AnimationController* controller, Transform* transform, bool hasPhys = false, PhysicsBody* body = nullptr);
 
 	void Update();
