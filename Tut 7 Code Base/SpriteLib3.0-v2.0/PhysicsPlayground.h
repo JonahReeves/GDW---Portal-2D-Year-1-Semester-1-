@@ -26,7 +26,7 @@ public:
 	void KeyboardUp() override;
 
 	//custom stuff
-	int kinematicPlat(std::string fileName, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg = 0.0);
+	int kinematicPlat(int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg = 0.0, std::string fileName = "Portal Wall.png");
 	int dynamicPlat(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg = 0.0, float gravityScale = 0.0);
 	int dynamicBall(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg = 0.0);
 	int basicDestroTrigger(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, int target, float rotationAngleDeg = 0.0);//Setup trigger
