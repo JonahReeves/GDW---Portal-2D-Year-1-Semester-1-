@@ -37,7 +37,7 @@ public:
 	void orangePortal(float xVal, float yVal, float rotationAngleDeg = 0.0);
 	static int getBluePortal();
 	static int getOrangePortal();
-	//int dynamicProj(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg = 0.0, float gravityScale = 0.0, int& projectile);
+	int dynamicProj(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg);
 
 protected:
 	bool m_firstWindow = false;
