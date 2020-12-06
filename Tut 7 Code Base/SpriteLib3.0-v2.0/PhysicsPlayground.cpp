@@ -218,7 +218,42 @@ int PhysicsPlayground::dynamicPlat(std::string file, int fileLength, int fileWid
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 
-	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, GROUND | ENVIRONMENT | PLAYER | TRIGGER | OBJECTS, 0.3f);
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, OBJECTS, GROUND | ENVIRONMENT | TRIGGER | OBJECTS, 0.3f);
+
+	tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
+	tempPhsBody.SetGravityScale(gravityScale);
+	return entity;
+}
+
+static unsigned int dynamicProj(b2World* m_physicsWorld, std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg, float gravityScale, int& projectile)
+{
+	auto entity = ECS::CreateEntity();
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+
+	//Sets up the components
+	std::string fileName = file;
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileLength, fileWidth);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(xVal, yVal, layerVal));
+
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_dynamicBody;
+	tempDef.position.Set(float32(xVal), float32(yVal));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, GROUND | ENVIRONMENT | TRIGGER | OBJECTS, 0.3f);
 
 	tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
 	tempPhsBody.SetGravityScale(gravityScale);
@@ -254,7 +289,7 @@ static unsigned int square(b2World* m_physicsWorld, float shapex, float shapey, 
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
-		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, OBJECTS, GROUND | ENVIRONMENT | PLAYER | TRIGGER, 0.3f);
+		tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, OBJECTS, GROUND | ENVIRONMENT | TRIGGER, 0.3f);
 
 		tempPhsBody.SetColor(vec4(1.f, 0.f, 1.f, 0.3f));
 		return entity;
@@ -866,6 +901,11 @@ void PhysicsPlayground::KeyboardDown()
 		pgangledown = true;
 	}
 
+	if (Input::GetKeyDown(Key::Z))
+	{
+		int projectile = dynamicProj(m_physicsWorld, "boxSprite.jpg", 5, 5, playerx, playery, 2, 0.0f, 0.01f, projectile);
+
+	}
 }
 
 void PhysicsPlayground::KeyboardUp()
