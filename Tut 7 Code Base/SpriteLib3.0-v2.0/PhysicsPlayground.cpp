@@ -58,7 +58,6 @@ int PhysicsPlayground::kinematicPlat(std::string file, int fileLength, int fileW
 	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 	tempPhsBody.SetRotationAngleDeg(rotationAngleDeg);
 	return entity;
-
 }
 
 int PhysicsPlayground::getBluePortal()
@@ -86,6 +85,47 @@ int PhysicsPlayground::translateTrigger(std::string file, int fileLength, int fi
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileLength, fileWidth);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(xVal, yVal, 80.f));
 	ECS::GetComponent<Trigger*>(entity) = new TranslateTrigger();
+	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+	ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(target);
+	TranslateTrigger* temp = (TranslateTrigger*)ECS::GetComponent<Trigger*>(entity);
+	temp->movement = b2Vec2(movementX, movementY);
+
+	//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(puzzleWall2);
+
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(xVal), float32(yVal));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER | OBJECTS);
+	tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+	tempPhsBody.SetRotationAngleDeg(rotationAngleDeg);
+	return entity;
+}
+
+int PhysicsPlayground::translateTriggerDoors(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float movementX, float movementY, int target, int speed, int direction, float rotationAngleDeg)
+{
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	ECS::AttachComponent<Trigger*>(entity);
+
+
+	//Sets up components
+	std::string fileName = file;
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileLength, fileWidth);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(xVal, yVal, 80.f));
+	ECS::GetComponent<Trigger*>(entity) = new TranslateTrigger(direction, speed);
 	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
 	ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(target);
 	TranslateTrigger* temp = (TranslateTrigger*)ECS::GetComponent<Trigger*>(entity);
@@ -571,7 +611,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		int movingPlat = dynamicPlat("boxSprite.jpg", 10, 50, 120, 40, 2, 0.0f, 0.01f);
 		kinematicPlat("boxSprite.jpg", 10, 50, 109, 60, 2); //staticplat
 		kinematicPlat("boxSprite.jpg", 10, 50, 131, 60, 2); //staticplat
-		int upTranslateTrigger = translateTrigger("boxSprite.jpg", 20, 10, 40, 0, 3, 2, movingPlat, 25000);
+	//	std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, int direction, int target, int speed, float rotationAngleDeg
+		int upTranslateTrigger = translateTriggerDoors ("boxSprite.jpg", 20, 10, 40, 0, 3, 2, movingPlat, 25000, 2, 0);
+		//int upTranslateTrigger = basicTranslateTrigger("boxSprite.jpg", 20, 10, 40, 0, 3, 2, movingPlat, 25000, 0);
 	}
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));

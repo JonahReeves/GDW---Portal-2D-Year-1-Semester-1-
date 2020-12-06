@@ -4,26 +4,28 @@
 
 class TranslateTrigger : public Trigger
 {
-	//enum class direction
-	//{
+	enum class direction
+	{
 
-	//	MLEFT = 0,
-	//	MRIGHT = 1,
-	//	MUP = 2,
-	//	MDOWN = 3
+		MLEFT = 0,
+		MRIGHT = 1,
+		MUP = 2,
+		MDOWN = 3
 
-	//};
+	};
 public:
-	//int dir;
-	//int speed;
-	//int toMove;
-	//TranslateTrigger(int d, int ent, int spd = 1000000)
-	//{
+	int dir;
+	int speed;
+	int toMove;
+	TranslateTrigger() : Trigger() {
 
-	//	dir = d;
-	//	toMove = ent;
-	//	speed = spd;
-	//}
+	}
+	TranslateTrigger(int d, int spd = 1000000)
+	{
+
+		dir = d;
+		speed = spd;
+	}
 	void OnTrigger() override;
 
 	void OnEnter() override;
