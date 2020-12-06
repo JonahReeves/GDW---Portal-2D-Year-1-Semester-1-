@@ -15,6 +15,7 @@ static unsigned int portalgunid;
 
 bool squarepickup;
 bool portalgunmove;
+float portalGunAngle = 0;
 bool pgangleup;
 bool pgangledown;
 
@@ -434,10 +435,10 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	{
 		square1id = square(m_physicsWorld, -50.f, 0.f, 20, 20, puzzleWall1);
 		int startingPlat = kinematicPlat(225, 10, 30, -10, 2, 0, "boxSprite.jpg");
-		kinematicPlat(10, 50, -75, 20, 2, 180);
+		kinematicPlat(10, 50, -75, 20, 2, 0);
 		//int traslator = translateTrigger("boxSprite.jpg", 20, 20, 30, 10, 10, 0, startingPlat);
 		bluePortal(30, 20, 0);
-		orangePortal(100, 20, -30);
+		orangePortal(100, 50, 270);
 		
 	
 	}
@@ -779,15 +780,49 @@ void PhysicsPlayground::KeyboardDown()
 		squarepickup = true;
 	}
 
-	if (Input::GetKeyDown(Key::UpArrow))
+
+
+	//angle portal guns
+	if (Input::GetKey(Key::UpArrow) && Input::GetKey(Key::LeftArrow))
 	{
-		pgangleup = true;
+		portalGunAngle = 135;
+	}
+	else if (Input::GetKey(Key::UpArrow) && Input::GetKey(Key::RightArrow))
+	{
+		portalGunAngle = 45;
+	}
+	else if (Input::GetKey(Key::DownArrow) && Input::GetKey(Key::LeftArrow))
+	{
+		portalGunAngle = 225;
+	}
+	else if (Input::GetKey(Key::DownArrow) && Input::GetKey(Key::RightArrow))
+	{
+		portalGunAngle = 315;
+	}
+	else if (Input::GetKey(Key::UpArrow))
+	{
+		portalGunAngle = 90;
+	}
+	else if (Input::GetKey(Key::DownArrow))
+	{
+		portalGunAngle = 270;
+	}
+	else if (Input::GetKey(Key::LeftArrow))
+	{
+		portalGunAngle = 180;
+	}
+	else if (Input::GetKey(Key::RightArrow))
+	{
+		portalGunAngle = 0;
+	}
+	else
+	{
+		portalGunAngle = 0;
 	}
 
-	if (Input::GetKeyDown(Key::DownArrow))
-	{
-		pgangledown = true;
-	}
+	
+
+	//spawn portals
 	if (Input::GetKeyDown(Key::K)) //Blue 
 	{
 		bluePortal(playerx +20, playery, 0);
@@ -828,26 +863,21 @@ void PhysicsPlayground::Update()
 	auto& portalgun = ECS::GetComponent<PhysicsBody>(portalgunid);
 	auto& player = ECS::GetComponent<PhysicsBody>(playerId);
 
-	float playerx, playery, square1x, square1y, portalgunangle;
+	float playerx, playery, square1x, square1y;
 	playerx = ECS::GetComponent<Transform>(playerId).GetPositionX();
 	playery = ECS::GetComponent<Transform>(playerId).GetPositionY();
 	square1x = ECS::GetComponent<Transform>(square1id).GetPositionX();
 	square1y = ECS::GetComponent<Transform>(square1id).GetPositionY();
 
-	portalgunangle = portalgun.GetRotationAngleDeg();
+
 
 	if (squarepickup) {
 		square1.SetPosition(b2Vec2(playerx + 30, playery));
 	}
 	portalgun.SetPosition(b2Vec2(playerx + 10, playery));
 
-	if (pgangleup) {
-		portalgun.SetRotationAngleDeg(portalgunangle + 2.f);
-	}
-	else if (pgangledown) {
-		portalgun.SetRotationAngleDeg(portalgunangle - 2.f);
-	}
-	else if (!pgangleup && !pgangledown) {
-		portalgun.SetRotationAngleDeg(portalgunangle);
-	}
+	
+
+	portalgun.SetRotationAngleDeg(portalGunAngle);
+	
 }
