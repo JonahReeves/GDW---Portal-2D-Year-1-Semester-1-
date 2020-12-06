@@ -39,6 +39,7 @@ public:
 	static int getBluePortal();
 	static int getOrangePortal();
 	static void portalPhysics(int target, int entPortal, int exitPortal);
+	int portalProj(bool portalColor, float xVal, float yVal, float directionAngle); //true = blue, false = orange
 
 protected:
 	bool m_firstWindow = false;
