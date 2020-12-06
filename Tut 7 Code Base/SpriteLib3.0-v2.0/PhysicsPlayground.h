@@ -38,6 +38,7 @@ public:
 	void orangePortal(float xVal, float yVal, float rotationAngleDeg = 0.0);
 	static int getBluePortal();
 	static int getOrangePortal();
+	static void portalPhysics(int target, int entPortal, int exitPortal);
 
 protected:
 	bool m_firstWindow = false;

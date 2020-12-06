@@ -9,19 +9,24 @@ void bPortalTrigger::OnEnter() //teleport user
 
 	if (active)
 	{
+		auto& t = ECS::GetComponent<Trigger*>(PhysicsPlayground::getOrangePortal());
+		t->active = false;
+
 		for (int i = 0; i < m_targetEntities.size(); i++)
 		{
 			b2Vec2 orangePos = ECS::GetComponent<PhysicsBody>(PhysicsPlayground::getOrangePortal()).GetPosition();
 
 			
 			ECS::GetComponent<PhysicsBody>(m_targetEntities[i]).SetPosition(orangePos, true);
-
+			//Update physics here
+			
+			PhysicsPlayground::portalPhysics(m_targetEntities[i], PhysicsPlayground::getBluePortal(), PhysicsPlayground::getOrangePortal());
 		}
 
-		auto &t = ECS::GetComponent<Trigger*>(PhysicsPlayground::getOrangePortal());
-		t->active = false;
-
+		
 		triggered = true;
+
+		
 		
 	}
 

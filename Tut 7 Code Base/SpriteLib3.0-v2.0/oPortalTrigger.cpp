@@ -9,19 +9,26 @@ void oPortalTrigger::OnEnter() //teleport user
 
 	if (active)
 	{
+		auto& t = ECS::GetComponent<Trigger*>(PhysicsPlayground::getBluePortal());
+		t->active = false;
+
 		for (int i = 0; i < m_targetEntities.size(); i++)
 		{
 			b2Vec2 bluePos = ECS::GetComponent<PhysicsBody>(PhysicsPlayground::getBluePortal()).GetPosition();
 
 
 			ECS::GetComponent<PhysicsBody>(m_targetEntities[i]).SetPosition(bluePos, true);// MAKE SURE TO REENABLE THIS ONCE U ADD A CD TO THE PORTAL TELEPORTS.
-			//actually whats better than a CD is that the portal you exit from is "de activated" until you leave it, allowing for portal loops to function without you running into a disabled portal too quickly.
+			//Update physics here
 
+			PhysicsPlayground::portalPhysics(m_targetEntities[i], PhysicsPlayground::getOrangePortal(), PhysicsPlayground::getBluePortal());
+			
+			
 		}
-		auto& t = ECS::GetComponent<Trigger*>(PhysicsPlayground::getBluePortal());
-		t->active = false;
-
+		
 		triggered = true;
+
+		
+		
 	}
 
 

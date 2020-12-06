@@ -70,6 +70,31 @@ int PhysicsPlayground::getOrangePortal()
 {
 	return oPortal;
 }
+
+void PhysicsPlayground::portalPhysics(int target, int entPortal, int exitPortal)
+{
+	//get bodies
+	auto& targetPhsBody = ECS::GetComponent<PhysicsBody>(target);
+	auto& entPhysBody = ECS::GetComponent<PhysicsBody>(entPortal);
+	auto& exitPhysBody = ECS::GetComponent<PhysicsBody>(exitPortal);
+
+	//get angles
+	float entrancePortalAngle = entPhysBody.GetRotationAngleDeg();
+	float exitPortalAngle = exitPhysBody.GetRotationAngleDeg() + 180;
+	float rotationAngleDeg = exitPortalAngle - entrancePortalAngle;
+	float theta = (rotationAngleDeg * PI / 180); //convert to rad
+
+
+	//vector math
+	vec3 vec = targetPhsBody.GetVelocity();
+
+	float rotatedX = (cos(theta) * vec.x) - (sin(theta) * vec.y);
+	float rotatedY = (sin(theta) * vec.x) + (cos(theta) * vec.y);
+	vec3 rotatedVec = vec3(rotatedX, rotatedY, vec.z);
+
+	targetPhsBody.SetVelocity(rotatedVec);
+}
+
 int PhysicsPlayground::translateTrigger(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float movementX, float movementY, int target, int speed, float rotationAngleDeg)
 {
 	//Creates entity
@@ -154,6 +179,10 @@ int PhysicsPlayground::translateTriggerDoors(std::string file, int fileLength, i
 
 void PhysicsPlayground::bluePortal(float xVal, float yVal, float rotationAngleDeg)
 {
+	if (bPortal != NULL) //Destroy previous portal
+	{
+		PhysicsBody::m_bodiesToDelete.push_back(bPortal);
+	}
 	//Creates entity
 	auto entity = ECS::CreateEntity();
 
@@ -189,10 +218,19 @@ void PhysicsPlayground::bluePortal(float xVal, float yVal, float rotationAngleDe
 	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER | OBJECTS);
 	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 	tempPhsBody.SetRotationAngleDeg(rotationAngleDeg);
+
+
+	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
+	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
+
 	bPortal = entity;
 }
 void PhysicsPlayground::orangePortal(float xVal, float yVal, float rotationAngleDeg)
 {
+	if (oPortal != NULL) //Destroy previous portal
+	{
+		PhysicsBody::m_bodiesToDelete.push_back(oPortal);
+	}
 	//Creates entity
 	auto entity = ECS::CreateEntity();
 
@@ -228,6 +266,11 @@ void PhysicsPlayground::orangePortal(float xVal, float yVal, float rotationAngle
 	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, TRIGGER, PLAYER | OBJECTS);
 	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 	tempPhsBody.SetRotationAngleDeg(rotationAngleDeg);
+
+
+	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
+	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
+
 	oPortal = entity;
 }
 
@@ -313,8 +356,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
 
-	EffectManager::CreateEffect(EffectType::Vignette, windowWidth, windowHeight);
-	EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
+	//EffectManager::CreateEffect(EffectType::Vignette, windowWidth, windowHeight);
+	//EffectManager::CreateEffect(EffectType::Sepia, windowWidth, windowHeight);
 	
 
 	//Setup MainCamera Entity
@@ -391,10 +434,10 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	{
 		square1id = square(m_physicsWorld, -50.f, 0.f, 20, 20, puzzleWall1);
 		int startingPlat = kinematicPlat(225, 10, 30, -10, 2, 0, "boxSprite.jpg");
-		kinematicPlat(10, 50, 60, 20, 2, 0);
+		kinematicPlat(10, 50, -75, 20, 2, 180);
 		//int traslator = translateTrigger("boxSprite.jpg", 20, 20, 30, 10, 10, 0, startingPlat);
-		bluePortal(70, 20);
-		orangePortal(100, 20);
+		bluePortal(30, 20, 0);
+		orangePortal(100, 20, -30);
 		
 	
 	}
@@ -696,7 +739,7 @@ void PhysicsPlayground::KeyboardHold()
 		portalgunmove = true;
 	}
 
-	//Change physics body size for circle
+	/*Change physics body size for circle
 	if (Input::GetKey(Key::O))
 	{
 		player.ScaleBody(1.3 * Timer::deltaTime, 0);
@@ -705,6 +748,7 @@ void PhysicsPlayground::KeyboardHold()
 	{
 		player.ScaleBody(-1.3 * Timer::deltaTime, 0);
 	}
+	*/
 }
 
 void PhysicsPlayground::KeyboardDown()
@@ -744,6 +788,15 @@ void PhysicsPlayground::KeyboardDown()
 	{
 		pgangledown = true;
 	}
+	if (Input::GetKeyDown(Key::K)) //Blue 
+	{
+		bluePortal(playerx +20, playery, 0);
+	}
+	if (Input::GetKeyDown(Key::L)) //Orange
+	{
+		orangePortal(playerx - 20, playery, 0);
+	}
+
 
 }
 
