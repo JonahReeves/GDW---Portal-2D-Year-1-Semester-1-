@@ -31,6 +31,7 @@ public:
 	int dynamicBall(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg = 0.0);
 	int basicDestroTrigger(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, int target, float rotationAngleDeg = 0.0);//Setup trigger
 	int translateTrigger(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float movementX, float movementY, int target, int speed = 100000, float rotationAngleDeg = 0.0);//Setup trigger
+	int basicTranslateTrigger(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, int direction, int target, int speed, float rotationAngleDeg);//Setup trigger
 	int boulder(int fileLength, int fileWidth, float xVal, float yVal, int rotation);
 	void bluePortal(float xVal, float yVal, float rotationAngleDeg = 0.0);
 	void orangePortal(float xVal, float yVal, float rotationAngleDeg = 0.0);
@@ -47,4 +48,7 @@ protected:
 
 	int puzzleWall1;
 	int puzzleWall2;
+	int puzzleWall3;
+	int puzzleWall4;
+	int puzzleWall5;
 };
