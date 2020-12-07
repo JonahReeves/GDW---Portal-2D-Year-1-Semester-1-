@@ -22,7 +22,7 @@ int portalSurfaceSize = 0;
 int activeProj;
 
 int loopLevelx = 1090;
-int loopLevely = 110;
+int loopLevely = 115;
 
 int momentumLevelx;
 int momentumLevely;
@@ -1061,7 +1061,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Infinite Portal Loop
 	{
 		int leftWall = kinematicPlat(10, 150, -18 + loopLevelx, 115 + loopLevely, 2, 180, "Portal Wall.png"); //Left Border Wall
-		kinematicPlat(10, 100, -18, 240 + loopLevelx, 2 + loopLevely, 180, "Portal Wall.png");
+		kinematicPlat(10, 100, -18 + loopLevelx, 240 + loopLevely, 2 , 180, "Portal Wall.png");
 		int floor = kinematicPlat(10, 150, 55 + loopLevelx, -10 + loopLevely, 2, 270, "Portal Wall.png");  //First Floor
 		int rightWall = kinematicPlat(10, 110, 132 + loopLevelx, 50 + loopLevely, 2, 0, "Portal Wall.png"); //Right Border Wall
 		NonPortPlat(10, 150, 202 + loopLevelx, 105 + loopLevely, 2, 90, "NonPortal Wall.png");
