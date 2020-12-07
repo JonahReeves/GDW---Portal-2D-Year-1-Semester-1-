@@ -482,7 +482,7 @@ int PhysicsPlayground::portalProj(bool portalColor, float xVal, float yVal, floa
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 
-	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), true, PROJECTILE, GROUND | ENVIRONMENT, 0.3f);
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), true, PROJECTILE, GROUND, 0.3f);
 
 	if (portalColor) //can remove later if need be
 		tempPhsBody.SetColor(vec4(0.f, 0.f, 1.f, 0.3f));
