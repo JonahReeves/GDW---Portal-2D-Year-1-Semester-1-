@@ -18,7 +18,8 @@ void bPortalSpawnTrigger::OnEnter() //teleport user
 
 	m_currScene->queuebPortal(ECS::GetComponent<PhysicsBody>(myself).GetPosition().x, ECS::GetComponent<PhysicsBody>(myself).GetPosition().y, wallRotationDeg);
 
-	//PhysicsBody::m_bodiesToDelete.push_back(myself);
+	PhysicsBody::m_bodiesToDelete.push_back(myself);
+	PhysicsPlayground::resetActiveProj();
 
 
 

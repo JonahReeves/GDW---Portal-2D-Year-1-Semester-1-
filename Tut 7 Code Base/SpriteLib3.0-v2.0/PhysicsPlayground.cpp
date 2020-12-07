@@ -11,10 +11,11 @@
 int playerId;
 int bPortal;
 int oPortal;
-int activeProj;
+
 b2Vec2 activeProjDir;
 int portalSurface[200]; //MAX 200 WALLS IN THE GAME
 int portalSurfaceSize = 0;
+int activeProj;
 
 static unsigned int square1id;
 static unsigned int portalgunid;
@@ -128,6 +129,11 @@ int PhysicsPlayground::getBluePortal()
 int PhysicsPlayground::getOrangePortal()
 {
 	return oPortal;
+}
+
+void PhysicsPlayground::resetActiveProj()
+{
+	activeProj = NULL;
 }
 
 void PhysicsPlayground::portalPhysics(int target, int entPortal, int exitPortal)
@@ -408,12 +414,14 @@ static unsigned int square(b2World* m_physicsWorld, float shapex, float shapey, 
 	}
 }
 
+
 int PhysicsPlayground::portalProj(bool portalColor, float xVal, float yVal, float directionAngle)
 {
-	if (activeProj != NULL) //Destroy any other portalproj that could be mid travel
+	if (activeProj != NULL)
 	{
 		PhysicsBody::m_bodiesToDelete.push_back(activeProj);
 	}
+
 	auto entity = ECS::CreateEntity();
 	//Add components
 	ECS::AttachComponent<Sprite>(entity);
@@ -475,9 +483,9 @@ int PhysicsPlayground::portalProj(bool portalColor, float xVal, float yVal, floa
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 
 	activeProj = entity;
+
 	float projSpeedMult = 100000.f;
 	activeProjDir = b2Vec2(cos(directionAngle * PI / 180) * projSpeedMult, sin(directionAngle * PI / 180) * projSpeedMult);
-
 	ECS::GetComponent<PhysicsBody>(activeProj).GetBody()->SetLinearVelocity(activeProjDir);
 
 	return entity;
@@ -1002,6 +1010,8 @@ void PhysicsPlayground::Update()
 	
 	portaloQueueCheck();
 	portalbQueueCheck();
+	
+
 	auto& square1 = ECS::GetComponent<PhysicsBody>(square1id);
 	auto& portalgun = ECS::GetComponent<PhysicsBody>(portalgunid);
 	auto& player = ECS::GetComponent<PhysicsBody>(playerId);
@@ -1011,14 +1021,6 @@ void PhysicsPlayground::Update()
 	playery = ECS::GetComponent<Transform>(playerId).GetPositionY();
 	square1x = ECS::GetComponent<Transform>(square1id).GetPositionX();
 	square1y = ECS::GetComponent<Transform>(square1id).GetPositionY();
-
-	//if portal projectile exists, update it
-	if (activeProj != NULL)
-	{
-		
-		//(ECS::GetComponent<PhysicsBody>(activeProj).GetPosition() + (activeProjDir));
-		
-	}
 
 
 

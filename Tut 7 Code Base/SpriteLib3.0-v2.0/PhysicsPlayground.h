@@ -45,6 +45,8 @@ public:
 	static int* getPortalSurfaces();
 	static int getContactSurface();
 	static int getActiveProj();
+	static void resetActiveProj();
+	
 	
 
 	void queueoPortal(float xVal, float yVal, float rotationAngleDeg)
@@ -85,6 +87,16 @@ public:
 		}
 	}
 
+	void deleteProjQueue()
+	{
+		m_deleteProjQueued = true;
+	}
+
+	void deleteProjQueueCheck()
+	{
+		
+	}
+
 	
 
 protected:
@@ -98,6 +110,8 @@ protected:
 	float bpqxVal = 0.f;
 	float bpqyVal = 0.f;
 	float bpqrotationAngleDeg = 0.f;
+
+	bool m_deleteProjQueued = false;
 
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;
