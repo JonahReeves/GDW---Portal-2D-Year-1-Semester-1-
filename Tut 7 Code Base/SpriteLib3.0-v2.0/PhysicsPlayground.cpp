@@ -928,20 +928,6 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//int upTranslateTrigger = basicTranslateTrigger("boxSprite.jpg", 20, 10, 40, 0, 3, 2, movingPlat, 25000, 0);
 	}
 	*/
-	////Level 0
-	//{
-	//	square1id = square(m_physicsWorld, -50.f, 0.f, 20, 20, puzzleWall1);
-	//	int floor = kinematicPlat(10, 300, 30, -10, 2, 270);
-	//	int leftWall = kinematicPlat(10, 200, -125, 95, 2, 180);
-	//	int rightWall = kinematicPlat(10, 200, 170, 95, 2, 0);
-	//	int roof = kinematicPlat(10, 300, -10, 100, 2, 90);
-	//	int testCheck1 = makeCheckpoint("boxSprite.jpg", 10, 10, 60, -5);
-	//	int testCheck2 = makeCheckpoint("boxSprite.jpg", 10, 10, -40, -5);
-	//	int deathCheck = makeDeathObject("Boulder.png", 10, 10, 90, 10);
-	//	int traslator = translateTrigger("boxSprite.jpg", 20, 20, 30, 10, 10, 0, startingPlat);
-	//	bluePortal(30, 20, 0);
-	//	orangePortal(100, 50, 270);
-	//}
 
 
 	//Level 1
@@ -1411,7 +1397,7 @@ void PhysicsPlayground::KeyboardDown()
 		}
 	}
 
-	if (Input::GetKeyDown(Key::E) && playerx > (squarepositionx - 30) && playerx < (squarepositionx + 30) && playery >(squarepositiony - 30) && playery < (squarepositiony + 30))
+	if (Input::GetKeyDown(Key::F) && playerx > (squarepositionx - 30) && playerx < (squarepositionx + 30) && playery >(squarepositiony - 30) && playery < (squarepositiony + 30))
 	{
 		squarepickup = true;
 	}
@@ -1475,12 +1461,12 @@ void PhysicsPlayground::KeyboardDown()
 	
 
 	//spawn portals
-	if (Input::GetKeyDown(Key::K)) //Blue 
+	if (Input::GetKeyDown(Key::Q)) //Blue 
 	{
 		portalProj(true, playerx, playery, portalGunAngle);
 		//bluePortal(playerx +20, playery, 0);
 	}
-	if (Input::GetKeyDown(Key::L)) //Orange
+	if (Input::GetKeyDown(Key::E)) //Orange
 	{
 		portalProj(false, playerx, playery, portalGunAngle);
 		//orangePortal(playerx - 20, playery, 0);
