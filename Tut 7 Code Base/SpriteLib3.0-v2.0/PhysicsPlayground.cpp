@@ -1041,7 +1041,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		NonPortPlat(10, 30, 875 + CompCubex, 50 + CompCubey, 2, 0, "NonPortal Wall.png");//DoorBlock
 		square1id = square(m_physicsWorld, 700.f + CompCubex, 0.f + CompCubey, 20, 20, puzzleWall1, "Companion Cube.png");//Companion Cube
 		int CompanionDoor = dynamicPlat("door.png", 10, 80, 865 + CompCubex, 30 + CompCubey, 2, 0.0f, 0.0f); //door
-		int CompanionDoorUp = translateDoorsObjOnly("fire.png", 90, 45, 800 + CompCubex, 5 + CompCubey, 1, 2, CompanionDoor, 25000, 2, 0); //Incinerator
+		int CompanionDoorUp = translateDoorsObjOnly("fire.png", 20, 10, 800 + CompCubex, 10 + CompCubey, 3, 2, CompanionDoor, 25000, 2, 0); //Incinerator
 		int comp_cubeCheck = makeCheckpoint("Checkpoint.png", 10, 10, 30 + CompCubex, 20 + CompCubey);
 
 
