@@ -998,12 +998,12 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		kinematicPlat(10, 60, 216 + level1x, 65 + level1y, 2, 180); //staticplat platforms next to door
 		kinematicPlat(10, 50, 164 + level1x, 50 + level1y, 2, 90.f); //platform on left of door
 		kinematicPlat(10, 80, -35 + level1x, 50 + level1y, 2, 90.f); //platform above start
-		kinematicPlat(23, 30, 85 + level1x, 5 + level1y, 2, 90.f); //box in middle of room
+		NonPortPlat(23, 30, 85 + level1x, 5 + level1y, 2, 90.f); //box in middle of room
 	}
 	//Level 2
 	{
 		square2id = square(m_physicsWorld, 250.f + level1x, 100.f + level1y, 20, 20, puzzleWall3);
-		int startingPlat2 = kinematicPlat(10, 200, 330 + level2x, -10 + level2y, 2, 90.f); //floor
+		int startingPlat2 = kinematicPlat(10, 200, 330 + level2x, -10 + level2y, 2, 270.f); //floor
 		kinematicPlat(10, 300, 300 + level1x, 190 + level1y, 2, 270.f); //roof
 		kinematicPlat(10, 35, 425 + level1x, 100 + level1y, 2, 270.f); //top of door
 		kinematicPlat(10, 90, 145 + level1x, 145 + level1y, 2, 180.f); //connects to roof left
@@ -1012,7 +1012,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		int upTranslateTrigger2 = translateTriggerDoors("boxSprite.jpg", 20, 10, 155 + level2x, 110 + level2y, 3, 2, movingPlat2, 25000, 2, 0); //button FIX
 		kinematicPlat(10, 60, 414 + level2x, 65 + level2y, 2, 0); //staticplat platforms next to door
 		kinematicPlat(10, 60, 436 + level2x, 65 + level2y, 2, 0); //staticplat platforms next to door
-		kinematicPlat(10, 50, 384 + level2x, 50 + level2y, 2, 90.f); //platform on left of door
+		NonPortPlat(10, 50, 384 + level2x, 50 + level2y, 2, 90.f); //platform on left of door
 		kinematicPlat(10, 80, 415 + level2x, 145 + level2y, 2, 0.f); // platform above right door
 		kinematicPlat(10, 50, 250 + level2x, 100 + level2y, 2, 90.f); //above start
 		//kinematicPlat(10, 50, 450 + level2x, 100 + level2y, 2, 90.f); //mirrors above start
@@ -1021,9 +1021,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Level 3
 	{
 		//square3id = square(m_physicsWorld, 400.f + level3x, 0.f + level3y, 20, 20, puzzleWall4);
-		int startingPlat3 = kinematicPlat(10, 100, 480 + level3x, -10 + level3y, 2, 90.f); //FLOOR
-		kinematicPlat(10, 100, 580 + level3x, -10 + level3y, 2, 90.f); //FLOOR
-		kinematicPlat(10, 100, 680 + level3x, -10 + level3y, 2, 90.f); //FLOOR
+		int startingPlat3 = kinematicPlat(10, 100, 480 + level3x, -10 + level3y, 2, 270.f); //FLOOR
+		NonPortPlat(10, 100, 580 + level3x, -10 + level3y, 2, 90.f); //FLOOR
+		NonPortPlat(10, 100, 680 + level3x, -10 + level3y, 2, 90.f); //FLOOR
 		kinematicPlat(10, 100, 630 + level3x, 10 + level3y, 2, 0.f); //wall on right
 		kinematicPlat(10, 70, 470 + level3x, 50 + level3y, 2, 90.f); //the thing up start
 		kinematicPlat(10, 70, 470 + level3x, 50 + level3y, 2, 90.f); //the thing up start 2
