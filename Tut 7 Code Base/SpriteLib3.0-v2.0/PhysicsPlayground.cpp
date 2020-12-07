@@ -989,8 +989,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Level 1
 	{
 		square4id = square(m_physicsWorld, -1000000.f + level1x, 80.f + level1y, 20, 20, puzzleWall1);
-		int startingPlat = NonPortPlat(10, 300, 80 + level1x, -10 + level1y, 2, 90.f); //floor
-		kinematicPlat(10, 300, 80 + level1x, 100 + level1y, 2, 270.f); //platform above moving door //roof
+		int startingPlat = NonPortPlat(10, 300, 80 + level1x, -10 + level1y, 2, 270.f, "NonPortal Wall.png"); //floor
+		kinematicPlat(10, 300, 80 + level1x, 100 + level1y, 2, 90.f); //platform above moving door //roof
 		kinematicPlat(10, 110, -75 + level1x, 40 + level1y, 2, 180.f);
 		int movingPlat = dynamicPlat("boxSprite.jpg", 10, 50, 200 + level1x, 40 + level1y, 2, 0.0f, 0.01f); //door
 		int upTranslateTrigger = translateTriggerDoors("boxSprite.jpg", 20, 10, -45 + level1x, 70 + level1y, 3, 2, movingPlat, 25000, 2, 0); //button
@@ -998,7 +998,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		kinematicPlat(10, 60, 216 + level1x, 65 + level1y, 2, 180); //staticplat platforms next to door
 		kinematicPlat(10, 50, 164 + level1x, 50 + level1y, 2, 90.f); //platform on left of door
 		kinematicPlat(10, 80, -35 + level1x, 50 + level1y, 2, 90.f); //platform above start
-		NonPortPlat(23, 30, 85 + level1x, 5 + level1y, 2, 90.f); //box in middle of room
+		NonPortPlat(23, 30, 85 + level1x, 5 + level1y, 2, 90.f, "NonPortal Wall.png"); //box in middle of room
 	}
 	//Level 2
 	{
