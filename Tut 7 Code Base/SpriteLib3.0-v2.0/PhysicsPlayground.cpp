@@ -90,8 +90,8 @@ int PhysicsPlayground::getContactSurface()
 	float currentWallx;
 	float currentWally;
 	float currentDistance;
-	float projx = ECS::GetComponent<PhysicsBody>(activeProj).GetPosition().x;;
-	float projy = ECS::GetComponent<PhysicsBody>(activeProj).GetPosition().x;;
+	float projx = ECS::GetComponent<PhysicsBody>(activeProj).GetPosition().x;
+	float projy = ECS::GetComponent<PhysicsBody>(activeProj).GetPosition().y;
 
 	float closestDistance = 9999.f;
 	int closestWall;
@@ -104,6 +104,7 @@ int PhysicsPlayground::getContactSurface()
 		if (currentDistance < closestDistance)
 		{
 			closestWall = portalSurface[i];
+			closestDistance = currentDistance;
 		}
 	}
 	return closestWall;
@@ -426,7 +427,7 @@ int PhysicsPlayground::portalProj(bool portalColor, float xVal, float yVal, floa
 
 	//Sets up the components
 	std::string fileName = "BeachBall.png";
-	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3, 3);
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 5, 5);
 	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(xVal, yVal, 10));
 
@@ -460,7 +461,7 @@ int PhysicsPlayground::portalProj(bool portalColor, float xVal, float yVal, floa
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 
-	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, PROJECTILE, GROUND | ENVIRONMENT, 0.3f);
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), vec2(0.f, 0.f), true, PROJECTILE, GROUND | ENVIRONMENT, 0.3f);
 
 	if (portalColor) //can remove later if need be
 		tempPhsBody.SetColor(vec4(0.f, 0.f, 1.f, 0.3f));
