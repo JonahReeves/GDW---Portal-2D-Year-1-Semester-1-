@@ -1028,8 +1028,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		NonPortPlat(10, 100, 680 + level3x, -10 + level3y, 2, 90.f, "NonPortal Wall.png"); //FLOOR
 		kinematicPlat(5, 100, 627.5 + level3x, 10 + level3y, 2, 0.f); //wall on right
 		kinematicPlat(5, 100, 632.5 + level3x, 10 + level3y, 2, 180.f); //wall on right flipped
-		kinematicPlat(10, 70, 470 + level3x, 50 + level3y, 2, 90.f); //the thing up start
-		kinematicPlat(10, 70, 470 + level3x, 50 + level3y, 2, 90.f); //the thing up start 2
+		kinematicPlat(5, 70, 470 + level3x, 52.5 + level3y, 2, 270.f); //the thing up start
+		kinematicPlat(5, 70, 470 + level3x, 47.5 + level3y, 2, 90.f); //the thing up start 2
 		kinematicPlat(10, 100, 432 + level3x, 145 + level3y, 2, 180); //thing 3
 		kinematicPlat(10, 100, 446 + level3x, 85 + level3y, 2, 180); //thing 3 2
 		kinematicPlat(10, 60, 620 + level3x, 125 + level3y, 2, 0); //staticplat platforms next to door r
@@ -1038,10 +1038,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		int upTranslateTrigger3 = translateTriggerDoors("boxSprite.jpg", 20, 10, 480 + level2x, 80 + level2y, 3, 2, movingPlat3, 25000, 2, 0); //button FIX
 		kinematicPlat(10, 100, 500 + level3x, 120 + level3y, 2, 90.f); //roof
 		kinematicPlat(10, 70, 580 + level3x, 120 + level3y, 2, 90.f); //roof
-		kinematicPlat(10, 20, 625 + level2x, 145 + level2y, 2, 270.f); // platform above right door
-		kinematicPlat(10, 100, 720 + level3x, 80 + level3y, 2, 0.f); // wall past door
-		//kinematicPlat(10, 100, 980 + level3x, -10 + level3y, 2, 0.f, "boxSprite.jpg"); //FLOOR
-		//kinematicPlat(10, 80, 700 + level3x, 145 + level3y, 2, 0.f); // platform above first door
+		kinematicPlat(10, 20, 625 + level2x, 145 + level2y, 2, 90.f); // platform above right door
+		kinematicPlat(10, 100, 720 + level3x, 95 + level3y, 2, 0.f); // wall past door
+
 	}
 	//Momentum level
 	{
@@ -1049,7 +1048,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		int pit_wall_L = kinematicPlat(10, 100, 85 + level4x, -55 + level4y, 2, 180);
 		int pit_wall_R = kinematicPlat(10, 100, 145 + level4x, -55 + level4y, 2, 0);
 		int pit1 = kinematicPlat(10, 60, 115 + level4x, -105 + level4y, 2, 270);
-		int momentumCheck = makeCheckpoint("boxSprite.jpg", 10, 10, 60 + level4x, -5 + level4y);
+		int momentumCheck = makeCheckpoint("boxSprite.jpg", 10, 10, 30 + level4x, 20 + level4y);
 		int floor2 = kinematicPlat(10, 50, 165 + level4x, -10 + level4y, 2, 270);
 		int wall1 = kinematicPlat(10, 60, 190 + level4x, 25 + level4y, 2, 0);
 		int floor_upper1 = kinematicPlat(10, 80, 230 + level4x, 50 + level4y, 2, 270);
