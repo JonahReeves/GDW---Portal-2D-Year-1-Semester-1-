@@ -21,6 +21,9 @@ int portalSurface[200]; //MAX 200 WALLS IN THE GAME
 int portalSurfaceSize = 0;
 int activeProj;
 
+int loopLevelx;
+int loopLevely;
+
 static unsigned int square1id;
 static unsigned int portalgunid;
 
@@ -79,6 +82,45 @@ int PhysicsPlayground::kinematicPlat(int fileLength, int fileWidth, float xVal, 
 	return entity;
 
 }
+
+int PhysicsPlayground::NonPortPlat(int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg, std::string file)
+{
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+
+	//Sets up components
+	std::string fileName = file;
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileLength, fileWidth);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(xVal, yVal, layerVal));
+
+	auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_kinematicBody;
+	tempDef.position.Set(float32(xVal), float32(yVal));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX),
+		float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, ENVIRONMENT, TRIGGER | PLAYER | ENEMY | OBJECTS);
+	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
+	tempPhsBody.SetRotationAngleDeg(rotationAngleDeg);
+
+	PhysicsPlayground::addToPortalSurface(entity);
+
+	return entity;
+
+}
+
 
 bool PhysicsPlayground::bPortalExists()
 {
@@ -694,7 +736,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	}
 
 	//Basic level
-	{
+	{/*
 		square1id = square(m_physicsWorld, -50.f, 0.f, 20, 20, puzzleWall1);
 		int floor = kinematicPlat(10, 300, 30, -10, 2, 270);
 		int leftWall = kinematicPlat(10, 200, -125, 95, 2, 180);
@@ -707,10 +749,23 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//bluePortal(30, 20, 0);
 		//orangePortal(100, 50, 270);
 		
-	
+	*/
 	}
  
-		
+	//Infinite Portal Loop
+	{
+		square1id = square(m_physicsWorld, -50.f + loopLevelx, 0.f + loopLevely, 20, 20, puzzleWall1);
+		int leftWall = kinematicPlat(10, 150, -18 + loopLevelx, 115 + loopLevely, 2, 180, "Portal Wall.png"); //Left Border Wall
+		kinematicPlat(10, 100, -18, 240 + loopLevelx, 2 + loopLevely, 180, "Portal Wall.png");
+		int floor = kinematicPlat(10, 150, 55 + loopLevelx, -10 + loopLevely, 2, 270, "Portal Wall.png");  //First Floor
+		int rightWall = kinematicPlat(10, 110, 132 + loopLevelx, 50 + loopLevely, 2, 0, "Portal Wall.png"); //Right Border Wall
+		NonPortPlat(10, 150, 202 + loopLevelx, 105 + loopLevely, 2, 90, "NonPortal Wall.png");
+		int roof = kinematicPlat(10, 100, 30 + loopLevelx, 285 + loopLevely, 2, 90, "Portal Wall.png");
+		NonPortPlat(10, 60, 110 + loopLevelx, 285 + loopLevely, 2, 90, "NonPortal Wall.png");
+		NonPortPlat(10, 100, 140 + loopLevelx, 235 + loopLevely, 2, 0, "NonPortal Wall.png");
+		NonPortPlat(10, 145, 208 + loopLevelx, 185 + loopLevely, 2, 90, "NonPortal Wall.png");
+		NonPortPlat(10, 30, 275 + loopLevelx, 165 + loopLevely, 2, 0, "NonPortal Wall.png");
+	}
 
 		//Portal Gun
 	{
