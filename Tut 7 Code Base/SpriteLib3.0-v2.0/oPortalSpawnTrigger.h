@@ -1,5 +1,7 @@
 #pragma once
 #include "Trigger.h"
+//#include "PhysicsPlayground.h"
+
 
 class PhysicsPlayground;
 class oPortalSpawnTrigger :
@@ -11,9 +13,9 @@ public:
 	void OnEnter() override;
 	void OnExit() override;
 	
-	void GetScene(PhysicsPlayground* scene);
+	void SetScene(PhysicsPlayground* scene);
 
-private:
+
 	PhysicsPlayground* m_currScene;
 protected:
 

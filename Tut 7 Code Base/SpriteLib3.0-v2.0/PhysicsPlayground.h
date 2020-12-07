@@ -46,9 +46,39 @@ public:
 	static int getContactSurface();
 	static int getActiveProj();
 	
+
+	void queueoPortal(float xVal, float yVal, float rotationAngleDeg = 0.0)
+	{
+		pqxVal = xVal;
+		pqyVal = yVal;
+		pqrotationAngleDeg = rotationAngleDeg;
+		m_portaloQueued = true;
+
+
+	}
+
+	void portaloQueueCheck()
+	{
+		if (m_portaloQueued)
+		{
+			orangePortal(pqxVal, pqyVal, pqrotationAngleDeg);
+			m_portaloQueued = false;
+		}
+	}
 	
 
 protected:
+	bool m_portaloQueued = false;
+	float pqxVal = 0.f;
+	float pqyVal = 0.f;
+	float pqrotationAngleDeg = 0.f;
+
+
+	bool m_portalbQueued = false;
+	float bpqxVal = 0.f;
+	float bpqyVal = 0.f;
+	float bpqrotationAngleDeg = 0.f;
+
 	bool m_firstWindow = false;
 	bool m_secondWindow = false;
 

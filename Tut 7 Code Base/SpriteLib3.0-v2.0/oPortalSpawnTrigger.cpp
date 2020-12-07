@@ -2,7 +2,6 @@
 #include "ECS.h"
 #include "PhysicsPlayground.h"
 
-
 void oPortalSpawnTrigger::OnEnter() //teleport user
 {
 	Trigger::OnEnter();
@@ -17,7 +16,7 @@ void oPortalSpawnTrigger::OnEnter() //teleport user
 	int myself = PhysicsPlayground::getActiveProj();
 
 
-	m_currScene->PhysicsPlayground::orangePortal(ECS::GetComponent<PhysicsBody>(myself).GetPosition().x, ECS::GetComponent<PhysicsBody>(myself).GetPosition().y, wallRotationDeg);
+	m_currScene->queueoPortal(ECS::GetComponent<PhysicsBody>(myself).GetPosition().x, ECS::GetComponent<PhysicsBody>(myself).GetPosition().y, wallRotationDeg);
 
 
 	
@@ -32,7 +31,7 @@ void oPortalSpawnTrigger::OnExit() // literally do nothing
 {
 	Trigger::OnExit();
 }
-void oPortalSpawnTrigger::GetScene(PhysicsPlayground* scene)
+void oPortalSpawnTrigger::SetScene(PhysicsPlayground* scene)
 {
 	m_currScene = scene;
 }
