@@ -793,22 +793,22 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		NonPortPlat(10, 30, 275 + loopLevelx, 165 + loopLevely, 2, 0, "NonPortal Wall.png");
 	*/}
 
-	//Momentum level
-	{
-		int floor1 = kinematicPlat(10, 80, 40, -10, 2, 270);
-		int pit_wall_L = kinematicPlat(10, 100, 85, -55, 2, 180);
-		int pit_wall_R = kinematicPlat(10, 100, 145, -55, 2, 0);
-		int pit1 = kinematicPlat(10, 60, 115, -105, 2, 270);
-		int momentumCheck = makeCheckpoint("boxSprite.jpg", 10, 10, 60, -5);
-		int floor2 = kinematicPlat(10, 50, 165, -10, 2, 270);
-		int wall1 = kinematicPlat(10, 60, 190, 25, 2, 0);
-		int floor_upper1 = kinematicPlat(10, 80, 230, 50, 2, 270);
-		int wall2 = kinematicPlat(10, 60, 270, 80, 2, 0);
-		int floor_upper2 = kinematicPlat(10, 80, 310, 105, 2, 270);
-		int roof1 = NonPortPlat(10, 150, 5, 120, 2, 180, "NonPortal Wall.png");
-		int roof2 = NonPortPlat(10, 350, 175, 195, 2, 90, "NonPortal Wall.png");
-		int roof3 = NonPortPlat(10, 50, 345, 170, 2, 0, "NonPortal Wall.png");
-	}
+	//Momentum level currently moving
+	//{
+	//	int floor1 = kinematicPlat(10, 80, 40, -10, 2, 270);
+	//	int pit_wall_L = kinematicPlat(10, 100, 85, -55, 2, 180);
+	//	int pit_wall_R = kinematicPlat(10, 100, 145, -55, 2, 0);
+	//	int pit1 = kinematicPlat(10, 60, 115, -105, 2, 270);
+	//	int momentumCheck = makeCheckpoint("boxSprite.jpg", 10, 10, 60, -5);
+	//	int floor2 = kinematicPlat(10, 50, 165, -10, 2, 270);
+	//	int wall1 = kinematicPlat(10, 60, 190, 25, 2, 0);
+	//	int floor_upper1 = kinematicPlat(10, 80, 230, 50, 2, 270);
+	//	int wall2 = kinematicPlat(10, 60, 270, 80, 2, 0);
+	//	int floor_upper2 = kinematicPlat(10, 80, 310, 105, 2, 270);
+	//	int roof1 = NonPortPlat(10, 150, 5, 120, 2, 180, "NonPortal Wall.png");
+	//	int roof2 = NonPortPlat(10, 350, 175, 195, 2, 90, "NonPortal Wall.png");
+	//	int roof3 = NonPortPlat(10, 50, 345, 170, 2, 0, "NonPortal Wall.png");
+	//}
 
 
 		//Portal Gun
