@@ -645,10 +645,18 @@ int PhysicsPlayground::portalProj(bool portalColor, float xVal, float yVal, floa
 	
 	ECS::AttachComponent<Trigger*>(entity);
 	
-
+	std::string fileName;
 
 	//Sets up the components
-	std::string fileName = "BeachBall.png";
+	if (portalColor)
+	{
+		fileName = "blue.png";
+	}
+	
+	else
+	{
+		fileName = "orange.png";
+	}
 	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 5, 5);
 	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(xVal, yVal, 10));

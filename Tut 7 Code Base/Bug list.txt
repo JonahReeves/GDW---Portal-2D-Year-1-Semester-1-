@@ -1,3 +1,0 @@
-Bug list:
-
-Cubes cant go through portals on their own
