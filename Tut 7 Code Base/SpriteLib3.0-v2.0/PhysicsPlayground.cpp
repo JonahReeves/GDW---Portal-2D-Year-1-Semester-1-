@@ -44,6 +44,8 @@ int level2x = 0;
 int level2y = 0;
 int level3x = 0;
 int level3y = 0;
+int CompCubex = 0;
+int CompCubey = 0;
 
 
 PhysicsPlayground::PhysicsPlayground(std::string name)
@@ -408,6 +410,46 @@ int PhysicsPlayground::translateTriggerDoors(std::string file, int fileLength, i
 	return entity;
 }
 
+int PhysicsPlayground::translateDoorsObjOnly(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float movementX, float movementY, int target, int speed, int direction, float rotationAngleDeg)
+{
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	ECS::AttachComponent<Trigger*>(entity);
+
+
+	//Sets up components
+	std::string fileName = file;
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileLength, fileWidth);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(xVal, yVal, 80.f));
+	ECS::GetComponent<Trigger*>(entity) = new TranslateTrigger(direction, speed);
+	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+	ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(target);
+	TranslateTrigger* temp = (TranslateTrigger*)ECS::GetComponent<Trigger*>(entity);
+	temp->movement = b2Vec2(movementX, movementY);
+
+	//ECS::GetComponent<Trigger*>(entity)->AddTargetEntity(puzzleWall2);
+
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(xVal), float32(yVal));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(40.f - shrinkX), float(40.f - shrinkY), vec2(0.f, 0.f), true, TRIGGER, OBJECTS);
+	tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+	tempPhsBody.SetRotationAngleDeg(rotationAngleDeg);
+	return entity;
+}
 
 void PhysicsPlayground::bluePortal(float xVal, float yVal, float rotationAngleDeg)
 {
@@ -749,7 +791,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//Basic level
 	{
-		square1id = square(m_physicsWorld, -50.f, 0.f, 20, 20, puzzleWall1);
+		//square1id = square(m_physicsWorld, -50.f, 0.f, 20, 20, puzzleWall1);
 		//int floor = kinematicPlat(10, 300, 30, -10, 2, 270);
 		//int leftWall = kinematicPlat(10, 200, -125, 95, 2, 180);
 		//int rightWall = kinematicPlat(10, 200, 170, 95, 2, 0);
@@ -810,6 +852,37 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//	int roof3 = NonPortPlat(10, 50, 345, 170, 2, 0, "NonPortal Wall.png");
 	//}
 
+	//Companion Cube Death
+	{
+
+		NonPortPlat(140, 125, 40 + CompCubex, -80 + CompCubey, 2, 90, "NonPortal Wall.png");//Starting Floor
+		NonPortPlat(10, 250, 105 + CompCubex, 65 + CompCubey, 2, 90, "NonPortal Wall.png");//Roof
+		NonPortPlat(10, 250, 355 + CompCubex, 65 + CompCubey, 2, 90, "NonPortal Wall.png");//Roof2
+		NonPortPlat(10, 250, 605 + CompCubex, 65 + CompCubey, 2, 90, "NonPortal Wall.png");//Roof3
+		NonPortPlat(10, 130, 795 + CompCubex, 65 + CompCubey, 2, 90, "NonPortal Wall.png");//Roof3
+
+		NonPortPlat(10, 125, 220 + CompCubex, -15 + CompCubey, 2, 90, "NonPortal Wall.png");//Platform 1
+		NonPortPlat(10, 125, 220 + CompCubex, -80 + CompCubey, 2, 0, "NonPortal Wall.png");//Platform 1 Arm
+
+		NonPortPlat(10, 125, 390 + CompCubex, -15 + CompCubey, 2, 90, "NonPortal Wall.png");//Platform 2
+		NonPortPlat(10, 125, 390 + CompCubex, -80 + CompCubey, 2, 0, "NonPortal Wall.png");//Platform 2 Arm
+
+		NonPortPlat(10, 125, 560 + CompCubex, -15 + CompCubey, 2, 90, "NonPortal Wall.png");//Platform 3
+		NonPortPlat(10, 125, 560 + CompCubex, -80 + CompCubey, 2, 0, "NonPortal Wall.png");//Platform 3 Arm
+
+		NonPortPlat(140, 200, 770 + CompCubex, -80 + CompCubey, 2, 90, "NonPortal Wall.png");//Ending Floor
+
+		makeDeathObject("Boulder.png", 570, 150, 387 + CompCubex, -115 + CompCubey);
+
+		NonPortPlat(10, 30, 855 + CompCubex, 50 + CompCubey, 2, 0, "NonPortal Wall.png");//DoorBlock
+		NonPortPlat(10, 30, 875 + CompCubex, 50 + CompCubey, 2, 0, "NonPortal Wall.png");//DoorBlock
+		square1id = square(m_physicsWorld, 0.f + CompCubex, 0.f + CompCubey, 20, 20, puzzleWall1);//Companion Cube
+		int CompanionDoor = dynamicPlat("boxSprite.jpg", 10, 80, 865 + CompCubex, 30 + CompCubey, 2, 0.0f, 0.01f); //door
+		int CompanionDoorUp = translateDoorsObjOnly("boxSprite.jpg", 20, 10, 800 + CompCubex, 10 + CompCubey, 3, 2, CompanionDoor, 25000, 2, 0); //Incinerator
+
+		
+	}
+
 
 		//Portal Gun
 	{
@@ -864,6 +937,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		//int upTranslateTrigger = basicTranslateTrigger("boxSprite.jpg", 20, 10, 40, 0, 3, 2, movingPlat, 25000, 0);
 	}
 	*/
+
 
 	//Level 1
 	{
@@ -1327,6 +1401,11 @@ void PhysicsPlayground::Update()
 	square2y = ECS::GetComponent<Transform>(square2id).GetPositionY();
 
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
+
+	if (square1x > 790 && square1x < 810 && square1y > -50 && square1y < 50) {
+		square1.SetPosition(b2Vec2(1000000, 0));
+	}
+
 
 	if (squarepickup) {
 		//if (playerx < (216 + level1x)) {
