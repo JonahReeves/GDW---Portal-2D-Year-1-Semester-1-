@@ -36,10 +36,17 @@ public:
 	int boulder(int fileLength, int fileWidth, float xVal, float yVal, int rotation);
 	void bluePortal(float xVal, float yVal, float rotationAngleDeg = 0.0);
 	void orangePortal(float xVal, float yVal, float rotationAngleDeg = 0.0);
+	static void spawnOrangePortal(float xVal, float yVal, float rotationAngleDeg = 0.0);
 	static int getBluePortal();
 	static int getOrangePortal();
 	static void portalPhysics(int target, int entPortal, int exitPortal);
 	int portalProj(bool portalColor, float xVal, float yVal, float directionAngle); //true = blue, false = orange
+	void addToPortalSurface(int ent);
+	static int* getPortalSurfaces();
+	static int getContactSurface();
+	static int getActiveProj();
+	
+	
 
 protected:
 	bool m_firstWindow = false;

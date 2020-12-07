@@ -2,6 +2,8 @@
 #include "Utilities.h"
 #include "bPortalTrigger.h"
 #include "oPortalTrigger.h"
+
+
 #include "FirePortal.h"
 
 #include <random>
@@ -11,6 +13,8 @@ int bPortal;
 int oPortal;
 int activeProj;
 b2Vec2 activeProjDir;
+int portalSurface[200]; //MAX 200 WALLS IN THE GAME
+int portalSurfaceSize = 0;
 
 static unsigned int square1id;
 static unsigned int portalgunid;
@@ -30,6 +34,7 @@ PhysicsPlayground::PhysicsPlayground(std::string name)
 
 	m_physicsWorld->SetContactListener(&listener);
 }
+
 int PhysicsPlayground::kinematicPlat(int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg, std::string file)
 {
 	//Creates entity
@@ -61,8 +66,56 @@ int PhysicsPlayground::kinematicPlat(int fileLength, int fileWidth, float xVal, 
 		float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false, GROUND, PROJECTILE | PLAYER | ENEMY | OBJECTS);
 	tempPhsBody.SetColor(vec4(0.f, 1.f, 0.f, 0.3f));
 	tempPhsBody.SetRotationAngleDeg(rotationAngleDeg);
+
+	PhysicsPlayground::addToPortalSurface(entity);
+
 	return entity;
 
+}
+int PhysicsPlayground::getActiveProj()
+{
+	return activeProj;
+}
+
+int PhysicsPlayground::getContactSurface()
+{
+	/*
+	when projectile hits a wall,
+	scans this array to see what wall it hit by comparing location values,
+	then takes the angle of that wall and creates a portal of the correct color at that location with the same rotation angle as the wall it hit
+	*/
+	
+	float currentWallx;
+	float currentWally;
+	float currentDistance;
+	float projx = ECS::GetComponent<PhysicsBody>(activeProj).GetPosition().x;;
+	float projy = ECS::GetComponent<PhysicsBody>(activeProj).GetPosition().x;;
+
+	float closestDistance = 9999.f;
+	int closestWall;
+	for (int i = 0; i < portalSurfaceSize; i++)
+	{
+		currentWallx = ECS::GetComponent<PhysicsBody>(portalSurface[i]).GetPosition().x;
+		currentWally = ECS::GetComponent<PhysicsBody>(portalSurface[i]).GetPosition().y;
+
+		currentDistance = sqrt(((projx - currentWallx) * (projx - currentWallx)) + ((projy - currentWally) * (projy - currentWally)));
+		if (currentDistance < closestDistance)
+		{
+			closestWall = portalSurface[i];
+		}
+	}
+	return closestWall;
+}
+
+void PhysicsPlayground::addToPortalSurface(int ent)
+{
+	portalSurface[portalSurfaceSize] = ent;
+	portalSurfaceSize++;
+}
+
+int* PhysicsPlayground::getPortalSurfaces() //gives a reference to the array of all portable surfaces
+{
+	return portalSurface;
 }
 
 int PhysicsPlayground::getBluePortal()
@@ -180,6 +233,7 @@ int PhysicsPlayground::translateTriggerDoors(std::string file, int fileLength, i
 	return entity;
 }
 
+
 void PhysicsPlayground::bluePortal(float xVal, float yVal, float rotationAngleDeg)
 {
 	if (bPortal != NULL) //Destroy previous portal
@@ -228,6 +282,8 @@ void PhysicsPlayground::bluePortal(float xVal, float yVal, float rotationAngleDe
 
 	bPortal = entity;
 }
+
+
 void PhysicsPlayground::orangePortal(float xVal, float yVal, float rotationAngleDeg)
 {
 	if (oPortal != NULL) //Destroy previous portal
@@ -360,7 +416,10 @@ int PhysicsPlayground::portalProj(bool portalColor, float xVal, float yVal, floa
 	ECS::AttachComponent<Sprite>(entity);
 	ECS::AttachComponent<Transform>(entity);
 	ECS::AttachComponent<PhysicsBody>(entity);
-	ECS::AttachComponent<Trigger*>(entity);
+	if (portalColor)
+		ECS::AttachComponent<bPortalSpawnTrigger*>(entity);
+	else
+		ECS::AttachComponent<oPortalSpawnTrigger*>(entity);
 	
 
 	//Sets up the components
@@ -369,10 +428,12 @@ int PhysicsPlayground::portalProj(bool portalColor, float xVal, float yVal, floa
 	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(xVal, yVal, 10));
 
-	if (portalColor) //true = blue, false = orange
-		ECS::GetComponent<Trigger*>(entity) = new bPortalSpawnTrigger();
+	if (portalColor)
+		ECS::GetComponent<bPortalSpawnTrigger*>(entity);
 	else
-		ECS::GetComponent<Trigger*>(entity) = new oPortalSpawnTrigger();
+		ECS::GetComponent<oPortalSpawnTrigger*>(entity)->GetScene(this);
+	
+
 
 
 
