@@ -592,7 +592,7 @@ int PhysicsPlayground::dynamicPlat(std::string file, int fileLength, int fileWid
 	return entity;
 }
 
-static unsigned int square(b2World* m_physicsWorld, float shapex, float shapey, float shapew, float shapeh, int& puzzleWall)
+static unsigned int square(b2World* m_physicsWorld, float shapex, float shapey, float shapew, float shapeh, int& puzzleWall, std::string file)
 {
 	{
 		//Square
@@ -603,7 +603,7 @@ static unsigned int square(b2World* m_physicsWorld, float shapex, float shapey, 
 		ECS::AttachComponent<PhysicsBody>(entity);
 
 		//Sets up the components
-		std::string fileName = "cube.jpg";
+		std::string fileName = file;
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, shapew, shapeh);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(45.f, -8.f, 3.f));
@@ -932,14 +932,13 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//Level 1
 	{
-		square4id = square(m_physicsWorld, -1000000.f + level1x, 80.f + level1y, 20, 20, puzzleWall1);
+		square4id = square(m_physicsWorld, -1000000.f + level1x, 80.f + level1y, 20, 20, puzzleWall1, "cube.jpg");
 		int startingPlat = NonPortPlat(10, 300, 80 + level1x, -10 + level1y, 2, 270.f, "NonPortal Wall.png"); //floor
 		kinematicPlat(5, 300, 80 + level1x, 97.5 + level1y, 2, 90.f); //platform above moving door //roof
 		kinematicPlat(5, 300, 80 + level1x, 102.5 + level1y, 2, 270.f); //platform above moving door //roof
 		kinematicPlat(10, 110, -75 + level1x, 40 + level1y, 2, 180.f);
 		int movingPlat = dynamicPlat("door.png", 10, 50, 205 + level1x, 20 + level1y, 2, 0.0f, 0.f); //door
-		
-		int upTranslateTrigger = translateTriggerDoors("button.png", 20, 15, -45 + level1x, 60 + level1y, 3, 2, movingPlat, 25000, 2, 0); //button
+		int upTranslateTrigger = translateTriggerDoors("button.png", 30, 25, -45 + level1x, 70 + level1y, 3, 2, movingPlat, 25000, 2, 0); //button
 		kinematicPlat(10, 60, 194 + level1x, 65 + level1y, 2, 0); //staticplat platforms next to door
 		kinematicPlat(10, 60, 216 + level1x, 65 + level1y, 2, 180); //staticplat platforms next to door
 		kinematicPlat(5, 50, 164 + level1x, 50 + level1y, 2, 90.f); //platform on left of door
@@ -950,14 +949,14 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	}
 	//Level 2
 	{
-		square2id = square(m_physicsWorld, 250.f + level1x, 115.f + level1y, 20, 20, puzzleWall3);
+		square2id = square(m_physicsWorld, 250.f + level1x, 115.f + level1y, 20, 20, puzzleWall3, "cube.jpg");
 		int startingPlat2 = kinematicPlat(10, 200, 330 + level2x, -10 + level2y, 2, 270.f); //floor
 		kinematicPlat(10, 300, 300 + level1x, 190 + level1y, 2, 90.f); //roof
 		kinematicPlat(10, 10, 425 + level1x, 100 + level1y, 2, 270.f); //top of door
 		kinematicPlat(10, 90, 145 + level1x, 145 + level1y, 2, 180.f); //connects to roof left
 		kinematicPlat(10, 60, 180 + level1x, 160 + level1y, 2, 180.f); //connects to roof right (2)
 		int movingPlat2 = dynamicPlat("door.png", 10, 50, 425 + level2x, 25 + level2y, 2, 0.0f, 0.0f); //door
-		int upTranslateTrigger2 = translateTriggerDoors("Portal_Button.png", 20, 5, 155 + level2x, 110 + level2y, 3, 2, movingPlat2, 25000, 2, 0); //button FIX
+		int upTranslateTrigger2 = translateTriggerDoors("Portal_Button.png", 30, 7.5, 165 + level2x, 110 + level2y, 3, 2, movingPlat2, 25000, 2, 0); //button FIX
 		kinematicPlat(10, 60, 414 + level2x, 65 + level2y, 2, 0); //staticplat platforms next to door
 		kinematicPlat(10, 60, 436 + level2x, 65 + level2y, 2, 0); //staticplat platforms next to door
 		NonPortPlat(10, 50, 384 + level2x, 50 + level2y, 2, 90.f, "NonPortal Wall.png"); //platform on left of door
@@ -980,7 +979,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		kinematicPlat(10, 60, 620 + level3x, 125 + level3y, 2, 0); //staticplat platforms next to door r
 		kinematicPlat(10, 60, 642 + level3x, 125 + level3y, 2, 0); //staticplat platforms next to door r
 		int movingPlat3 = dynamicPlat("door.png", 10, 50, 630 + level3x, 85 + level3y, 2, 0.0f, 0.0f); //door
-		int upTranslateTrigger3 = translateTriggerDoors("button.png", 20, 10, 480 + level2x, 80 + level2y, 3, 2, movingPlat3, 25000, 2, 0); //button FIX
+		int upTranslateTrigger3 = translateTriggerDoors("button.png", 30, 25, 480 + level2x, 67 + level2y, 3, 2, movingPlat3, 25000, 2, 0); //button FIX
 		kinematicPlat(10, 100, 500 + level3x, 120 + level3y, 2, 90.f); //roof
 		kinematicPlat(10, 70, 580 + level3x, 120 + level3y, 2, 90.f); //roof
 		kinematicPlat(10, 20, 625 + level2x, 145 + level2y, 2, 90.f); // platform above right door
@@ -1040,7 +1039,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		NonPortPlat(10, 30, 855 + CompCubex, 50 + CompCubey, 2, 0, "NonPortal Wall.png");//DoorBlock
 		NonPortPlat(10, 30, 875 + CompCubex, 50 + CompCubey, 2, 0, "NonPortal Wall.png");//DoorBlock
-		square1id = square(m_physicsWorld, 700.f + CompCubex, 0.f + CompCubey, 20, 20, puzzleWall1);//Companion Cube
+		square1id = square(m_physicsWorld, 700.f + CompCubex, 0.f + CompCubey, 20, 20, puzzleWall1, "Companion Cube.png");//Companion Cube
 		int CompanionDoor = dynamicPlat("door.png", 10, 80, 865 + CompCubex, 30 + CompCubey, 2, 0.0f, 0.0f); //door
 		int CompanionDoorUp = translateDoorsObjOnly("fire.png", 20, 10, 800 + CompCubex, 10 + CompCubey, 3, 2, CompanionDoor, 25000, 2, 0); //Incinerator
 		int comp_cubeCheck = makeCheckpoint("Checkpoint.png", 10, 10, 30 + CompCubex, 20 + CompCubey);
@@ -1520,7 +1519,7 @@ void PhysicsPlayground::Update()
 
 	ECS::GetComponent<Player>(MainEntities::MainPlayer()).Update();
 
-	if (square1x > 790 && square1x < 810 && square1y > -50 && square1y < 50) {
+	if (square1x > 790 + CompCubex && square1x < 810 + CompCubex && square1y > -50 + CompCubey && square1y < 50 + CompCubey) {
 		square1.SetPosition(b2Vec2(1000000, 0));
 	}
 
