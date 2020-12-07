@@ -7,7 +7,7 @@ void bPortalTrigger::OnEnter() //teleport user
 {
 	Trigger::OnEnter();
 
-	if (active)
+	if (active && PhysicsPlayground::oPortalExists())
 	{
 		auto& t = ECS::GetComponent<Trigger*>(PhysicsPlayground::getOrangePortal());
 		t->active = false;

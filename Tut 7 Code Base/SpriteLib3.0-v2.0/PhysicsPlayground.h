@@ -46,6 +46,8 @@ public:
 	static int getContactSurface();
 	static int getActiveProj();
 	static void resetActiveProj();
+	static bool bPortalExists();
+	static bool oPortalExists();
 	
 	
 

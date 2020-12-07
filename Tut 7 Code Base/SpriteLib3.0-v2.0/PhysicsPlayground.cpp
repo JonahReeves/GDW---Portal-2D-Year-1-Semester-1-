@@ -75,6 +75,19 @@ int PhysicsPlayground::kinematicPlat(int fileLength, int fileWidth, float xVal, 
 	return entity;
 
 }
+
+bool PhysicsPlayground::bPortalExists()
+{
+	if (bPortal != NULL)
+		return true;
+	return false;
+}
+bool PhysicsPlayground::oPortalExists()
+{
+	if (oPortal != NULL)
+		return true;
+	return false;
+}
 int PhysicsPlayground::getActiveProj()
 {
 	return activeProj;
@@ -962,11 +975,7 @@ void PhysicsPlayground::KeyboardDown()
 	{
 		portalGunAngle = 0;
 	}
-	else
-	{
-		portalGunAngle = 0;
-	}
-
+	
 	
 
 	//spawn portals
