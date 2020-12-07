@@ -20,7 +20,7 @@ void oPortalSpawnTrigger::OnEnter() //teleport user
 	m_currScene->PhysicsPlayground::orangePortal(ECS::GetComponent<PhysicsBody>(myself).GetPosition().x, ECS::GetComponent<PhysicsBody>(myself).GetPosition().y, wallRotationDeg);
 
 
-
+	
 
 
 
@@ -31,4 +31,8 @@ void oPortalSpawnTrigger::OnEnter() //teleport user
 void oPortalSpawnTrigger::OnExit() // literally do nothing
 {
 	Trigger::OnExit();
+}
+void oPortalSpawnTrigger::GetScene(PhysicsPlayground* scene)
+{
+	m_currScene = scene;
 }

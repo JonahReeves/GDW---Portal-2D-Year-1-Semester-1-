@@ -25,6 +25,7 @@ float portalGunAngle = 0;
 bool pgangleup;
 bool pgangledown;
 
+
 PhysicsPlayground::PhysicsPlayground(std::string name)
 	: Scene(name)
 {
@@ -33,6 +34,7 @@ PhysicsPlayground::PhysicsPlayground(std::string name)
 	m_physicsWorld->SetGravity(m_gravity);
 
 	m_physicsWorld->SetContactListener(&listener);
+	
 }
 
 int PhysicsPlayground::kinematicPlat(int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg, std::string file)
@@ -432,6 +434,7 @@ int PhysicsPlayground::portalProj(bool portalColor, float xVal, float yVal, floa
 		ECS::GetComponent<bPortalSpawnTrigger*>(entity);
 	else
 		ECS::GetComponent<oPortalSpawnTrigger*>(entity)->GetScene(this);
+		
 	
 
 
