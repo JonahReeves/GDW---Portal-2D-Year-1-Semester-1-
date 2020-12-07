@@ -426,7 +426,7 @@ int PhysicsPlayground::portalProj(bool portalColor, float xVal, float yVal, floa
 
 	//Sets up the components
 	std::string fileName = "BeachBall.png";
-	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 10, 10);
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 3, 3);
 	ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 	ECS::GetComponent<Transform>(entity).SetPosition(vec3(xVal, yVal, 10));
 
@@ -436,6 +436,7 @@ int PhysicsPlayground::portalProj(bool portalColor, float xVal, float yVal, floa
 	{
 		ECS::GetComponent<Trigger*>(entity) = new bPortalSpawnTrigger();
 		ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+		((bPortalSpawnTrigger*)ECS::GetComponent<Trigger*>(entity))->SetScene(this);
 	}
 	else
 	{
@@ -459,7 +460,7 @@ int PhysicsPlayground::portalProj(bool portalColor, float xVal, float yVal, floa
 	tempBody = m_physicsWorld->CreateBody(&tempDef);
 
 
-	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, OBJECTS, GROUND | ENVIRONMENT, 0.3f);
+	tempPhsBody = PhysicsBody(entity, tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), true, PROJECTILE, GROUND | ENVIRONMENT, 0.3f);
 
 	if (portalColor) //can remove later if need be
 		tempPhsBody.SetColor(vec4(0.f, 0.f, 1.f, 0.3f));
@@ -473,7 +474,7 @@ int PhysicsPlayground::portalProj(bool portalColor, float xVal, float yVal, floa
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 
 	activeProj = entity;
-	float projSpeedMult = 400;
+	float projSpeedMult = 100000.f;
 	activeProjDir = b2Vec2(cos(directionAngle * PI / 180) * projSpeedMult, sin(directionAngle * PI / 180) * projSpeedMult);
 
 	ECS::GetComponent<PhysicsBody>(activeProj).GetBody()->SetLinearVelocity(activeProjDir);
@@ -569,11 +570,13 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//Basic level
 	{
 		square1id = square(m_physicsWorld, -50.f, 0.f, 20, 20, puzzleWall1);
-		int startingPlat = kinematicPlat(225, 10, 30, -10, 2, 0, "boxSprite.jpg");
-		kinematicPlat(10, 50, -75, 20, 2, 0);
+		int floor = kinematicPlat(10, 300, 30, -10, 2, 270);
+		int leftWall = kinematicPlat(10, 200, -125, 95, 2, 180);
+		int rightWall = kinematicPlat(10, 200, 170, 95, 2, 0);
+		int roof = kinematicPlat(10, 300, -10, 100, 2, 90);
 		//int traslator = translateTrigger("boxSprite.jpg", 20, 20, 30, 10, 10, 0, startingPlat);
-		bluePortal(30, 20, 0);
-		orangePortal(100, 50, 270);
+		//bluePortal(30, 20, 0);
+		//orangePortal(100, 50, 270);
 		
 	
 	}
@@ -997,6 +1000,7 @@ void PhysicsPlayground::Update()
 	using namespace std;
 	
 	portaloQueueCheck();
+	portalbQueueCheck();
 	auto& square1 = ECS::GetComponent<PhysicsBody>(square1id);
 	auto& portalgun = ECS::GetComponent<PhysicsBody>(portalgunid);
 	auto& player = ECS::GetComponent<PhysicsBody>(playerId);

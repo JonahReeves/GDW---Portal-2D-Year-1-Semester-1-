@@ -47,12 +47,22 @@ public:
 	static int getActiveProj();
 	
 
-	void queueoPortal(float xVal, float yVal, float rotationAngleDeg = 0.0)
+	void queueoPortal(float xVal, float yVal, float rotationAngleDeg)
 	{
 		pqxVal = xVal;
 		pqyVal = yVal;
 		pqrotationAngleDeg = rotationAngleDeg;
 		m_portaloQueued = true;
+
+
+	}
+
+	void queuebPortal(float xVal, float yVal, float rotationAngleDeg)
+	{
+		bpqxVal = xVal;
+		bpqyVal = yVal;
+		bpqrotationAngleDeg = rotationAngleDeg;
+		m_portalbQueued = true;
 
 
 	}
@@ -65,6 +75,16 @@ public:
 			m_portaloQueued = false;
 		}
 	}
+
+	void portalbQueueCheck()
+	{
+		if (m_portalbQueued)
+		{
+			bluePortal(bpqxVal, bpqyVal, bpqrotationAngleDeg);
+			m_portalbQueued = false;
+		}
+	}
+
 	
 
 protected:
