@@ -1,8 +1,9 @@
 #include "deathTrigger.h"
 #include "ECS.h"
 #include "PhysicsPlayground.h"
+#include "EffectManager.h"
 
-
+int index;
 void deathTrigger::OnEnter() //respawn user
 {
 	//get location of the object its attached to
@@ -15,6 +16,7 @@ void deathTrigger::OnEnter() //respawn user
 	{
 
 		m_currScene->respawn();
+		index = EffectManager::CreateEffect(EffectType::Sepia, 300, 300);
 		triggered = true;
 	}
 
@@ -28,6 +30,7 @@ void deathTrigger::OnExit() // literally do nothing
 
 	Trigger::OnExit();
 	triggered = false;
+	EffectManager::RemoveEffect(index);
 }
 
 void deathTrigger::SetScene(PhysicsPlayground* scene)
