@@ -1398,10 +1398,11 @@ void PhysicsPlayground::KeyboardDown()
 		}
 	}
 
-	if (Input::GetKeyDown(Key::F) && playerx > (squarepositionx - 30) && playerx < (squarepositionx + 30) && playery >(squarepositiony - 30) && playery < (squarepositiony + 30))
+	/*if (Input::GetKeyDown(Key::F) && playerx > (squarepositionx - 30) && playerx < (squarepositionx + 30) && playery >(squarepositiony - 30) && playery < (squarepositiony + 30))
 	{
 		squarepickup = true;
 	}
+	*/
 
 	if (Input::GetKeyDown(Key::R)) //reset portals
 	{
