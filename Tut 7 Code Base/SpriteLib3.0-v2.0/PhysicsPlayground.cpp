@@ -993,8 +993,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		kinematicPlat(5, 300, 80 + level1x, 97.5 + level1y, 2, 90.f); //platform above moving door //roof
 		kinematicPlat(5, 300, 80 + level1x, 102.5 + level1y, 2, 270.f); //platform above moving door //roof
 		kinematicPlat(10, 110, -75 + level1x, 40 + level1y, 2, 180.f);
-		int movingPlat = dynamicPlat("boxSprite.jpg", 10, 50, 200 + level1x, 40 + level1y, 2, 0.0f, 0.01f); //door
-		int upTranslateTrigger = translateTriggerDoors("boxSprite.jpg", 20, 10, -45 + level1x, 70 + level1y, 3, 2, movingPlat, 25000, 2, 0); //button
+		int movingPlat = dynamicPlat("door.png", 10, 50, 200 + level1x, 40 + level1y, 2, 0.0f, 0.01f); //door
+		int upTranslateTrigger = translateTriggerDoors("button.png", 20, 15, -45 + level1x, 60 + level1y, 3, 2, movingPlat, 25000, 2, 0); //button
 		kinematicPlat(10, 60, 194 + level1x, 65 + level1y, 2, 0); //staticplat platforms next to door
 		kinematicPlat(10, 60, 216 + level1x, 65 + level1y, 2, 180); //staticplat platforms next to door
 		kinematicPlat(5, 50, 164 + level1x, 50 + level1y, 2, 90.f); //platform on left of door
@@ -1011,8 +1011,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		kinematicPlat(10, 10, 425 + level1x, 100 + level1y, 2, 270.f); //top of door
 		kinematicPlat(10, 90, 145 + level1x, 145 + level1y, 2, 180.f); //connects to roof left
 		kinematicPlat(10, 60, 180 + level1x, 160 + level1y, 2, 180.f); //connects to roof right (2)
-		int movingPlat2 = dynamicPlat("boxSprite.jpg", 10, 50, 420 + level2x, 40 + level2y, 2, 0.0f, 0.01f); //door
-		int upTranslateTrigger2 = translateTriggerDoors("boxSprite.jpg", 20, 10, 155 + level2x, 110 + level2y, 3, 2, movingPlat2, 25000, 2, 0); //button FIX
+		int movingPlat2 = dynamicPlat("door.png", 10, 50, 420 + level2x, 40 + level2y, 2, 0.0f, 0.01f); //door
+		int upTranslateTrigger2 = translateTriggerDoors("Portal_Button.png", 20, 5, 155 + level2x, 110 + level2y, 3, 2, movingPlat2, 25000, 2, 0); //button FIX
 		kinematicPlat(10, 60, 414 + level2x, 65 + level2y, 2, 0); //staticplat platforms next to door
 		kinematicPlat(10, 60, 436 + level2x, 65 + level2y, 2, 0); //staticplat platforms next to door
 		NonPortPlat(10, 50, 384 + level2x, 50 + level2y, 2, 90.f, "NonPortal Wall.png"); //platform on left of door
@@ -1034,8 +1034,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		kinematicPlat(10, 100, 446 + level3x, 85 + level3y, 2, 180); //thing 3 2
 		kinematicPlat(10, 60, 620 + level3x, 125 + level3y, 2, 0); //staticplat platforms next to door r
 		kinematicPlat(10, 60, 642 + level3x, 125 + level3y, 2, 0); //staticplat platforms next to door r
-		int movingPlat3 = dynamicPlat("boxSprite.jpg", 10, 50, 630 + level3x, 100 + level3y, 2, 0.0f, 0.01f); //door
-		int upTranslateTrigger3 = translateTriggerDoors("boxSprite.jpg", 20, 10, 480 + level2x, 80 + level2y, 3, 2, movingPlat3, 25000, 2, 0); //button FIX
+		int movingPlat3 = dynamicPlat("door.png", 10, 50, 630 + level3x, 100 + level3y, 2, 0.0f, 0.01f); //door
+		int upTranslateTrigger3 = translateTriggerDoors("button.png", 20, 10, 480 + level2x, 80 + level2y, 3, 2, movingPlat3, 25000, 2, 0); //button FIX
 		kinematicPlat(10, 100, 500 + level3x, 120 + level3y, 2, 90.f); //roof
 		kinematicPlat(10, 70, 580 + level3x, 120 + level3y, 2, 90.f); //roof
 		kinematicPlat(10, 20, 625 + level2x, 145 + level2y, 2, 90.f); // platform above right door
