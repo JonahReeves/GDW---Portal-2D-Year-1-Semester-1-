@@ -33,6 +33,7 @@ public:
 	int basicDestroTrigger(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, int target, float rotationAngleDeg = 0.0);//Setup trigger
 	int translateTrigger(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float movementX, float movementY, int target, int speed = 100000, float rotationAngleDeg = 0.0);//Setup trigger
 	int translateTriggerDoors(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float movementX, float movementY, int target, int speed = 100000, int direction = 2, float rotationAngleDeg = 0.0);//Setup trigger
+	int translateDoorsObjOnly(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float movementX, float movementY, int target, int speed = 100000, int direction = 2, float rotationAngleDeg = 0.0);//Setup trigger
 	int basicTranslateTrigger(std::string file, int fileLength, int fileWidth, float xVal, float yVal, float layerVal, int direction, int target, int speed, float rotationAngleDeg);//Setup trigger
 	int boulder(int fileLength, int fileWidth, float xVal, float yVal, int rotation);
 	void bluePortal(float xVal, float yVal, float rotationAngleDeg = 0.0);
