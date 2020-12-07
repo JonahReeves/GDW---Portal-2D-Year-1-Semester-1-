@@ -996,23 +996,25 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		int upTranslateTrigger = translateTriggerDoors("boxSprite.jpg", 20, 10, -45 + level1x, 70 + level1y, 3, 2, movingPlat, 25000, 2, 0); //button
 		kinematicPlat(10, 60, 194 + level1x, 65 + level1y, 2, 0); //staticplat platforms next to door
 		kinematicPlat(10, 60, 216 + level1x, 65 + level1y, 2, 180); //staticplat platforms next to door
-		kinematicPlat(10, 50, 164 + level1x, 50 + level1y, 2, 90.f); //platform on left of door
-		kinematicPlat(10, 80, -35 + level1x, 50 + level1y, 2, 90.f); //platform above start
+		kinematicPlat(5, 50, 164 + level1x, 50 + level1y, 2, 90.f); //platform on left of door
+		kinematicPlat(5, 80, -35 + level1x, 50 + level1y, 2, 90.f); //platform above start
+		kinematicPlat(5, 50, 164 + level1x, 55 + level1y, 2, 270.f); //platform on left of door
+		kinematicPlat(5, 80, -35 + level1x, 55 + level1y, 2, 270.f); //platform above start
 		NonPortPlat(23, 30, 85 + level1x, 5 + level1y, 2, 90.f, "NonPortal Wall.png"); //box in middle of room
 	}
 	//Level 2
 	{
 		square2id = square(m_physicsWorld, 250.f + level1x, 100.f + level1y, 20, 20, puzzleWall3);
 		int startingPlat2 = kinematicPlat(10, 200, 330 + level2x, -10 + level2y, 2, 270.f); //floor
-		kinematicPlat(10, 300, 300 + level1x, 190 + level1y, 2, 270.f); //roof
-		kinematicPlat(10, 35, 425 + level1x, 100 + level1y, 2, 270.f); //top of door
+		kinematicPlat(10, 300, 300 + level1x, 190 + level1y, 2, 90.f); //roof
+		kinematicPlat(10, 30, 425 + level1x, 100 + level1y, 2, 270.f); //top of door
 		kinematicPlat(10, 90, 145 + level1x, 145 + level1y, 2, 180.f); //connects to roof left
 		kinematicPlat(10, 60, 180 + level1x, 160 + level1y, 2, 180.f); //connects to roof right (2)
 		int movingPlat2 = dynamicPlat("boxSprite.jpg", 10, 50, 420 + level2x, 40 + level2y, 2, 0.0f, 0.01f); //door
 		int upTranslateTrigger2 = translateTriggerDoors("boxSprite.jpg", 20, 10, 155 + level2x, 110 + level2y, 3, 2, movingPlat2, 25000, 2, 0); //button FIX
 		kinematicPlat(10, 60, 414 + level2x, 65 + level2y, 2, 0); //staticplat platforms next to door
 		kinematicPlat(10, 60, 436 + level2x, 65 + level2y, 2, 0); //staticplat platforms next to door
-		NonPortPlat(10, 50, 384 + level2x, 50 + level2y, 2, 90.f); //platform on left of door
+		NonPortPlat(10, 50, 384 + level2x, 50 + level2y, 2, 90.f, "NonPortal Wall.png"); //platform on left of door
 		kinematicPlat(10, 80, 415 + level2x, 145 + level2y, 2, 0.f); // platform above right door
 		kinematicPlat(10, 50, 250 + level2x, 100 + level2y, 2, 90.f); //above start
 		//kinematicPlat(10, 50, 450 + level2x, 100 + level2y, 2, 90.f); //mirrors above start
