@@ -1109,7 +1109,31 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		int roof4 = NonPortPlat(10, 90, 475 + levelFPx, 160 + levelFPy, 2, 90, "NonPortal Wall.png");
 		int roof5 = NonPortPlat(10, 80, 620 + levelFPx, 160 + levelFPy, 2, 90, "NonPortal Wall.png");
 		int roof6 = NonPortPlat(10, 60, 665 + levelFPx, 130 + levelFPy, 2, 180, "NonPortal Wall.png");
+
+		//final room
+		{
+			int floor1 = NonPortPlat(10, 150, 745 + levelFPx, 50 + levelFPy , 2, 270, "NonPortal Wall.png");
+
+
+			//Setup new Entity
+			{
+				//Creates entity
+				auto entity = ECS::CreateEntity();
+
+				//Add components
+				ECS::AttachComponent<Sprite>(entity);
+				ECS::AttachComponent<Transform>(entity);
+
+				//Set up the components
+				std::string fileName = "finalimage.png";
+				ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 350, 300);
+				ECS::GetComponent<Sprite>(entity).SetTransparency(1.0f);
+				ECS::GetComponent<Transform>(entity).SetPosition(vec3(895 + levelFPx, 60 + levelFPy, 0.f));
+			}
+
+		}
 	}
+
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
@@ -1533,4 +1557,11 @@ void PhysicsPlayground::Update()
 
 	portalgun.SetRotationAngleDeg(portalGunAngle);
 	
+
+
+	if (ECS::GetComponent<Transform>(MainEntities::MainPlayer()).GetPosition().x >3050)
+	{
+		std::cout << "You Reached the end of the level";
+		exit(true);
+	}
 }
