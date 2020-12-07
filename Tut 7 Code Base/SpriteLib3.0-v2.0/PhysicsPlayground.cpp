@@ -24,6 +24,9 @@ int activeProj;
 int loopLevelx;
 int loopLevely;
 
+int momentumLevelx;
+int momentumLevely;
+
 static unsigned int square1id;
 static unsigned int square2id;
 static unsigned int square3id;
@@ -745,20 +748,20 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	}
 
 	//Basic level
-	{/*
+	{
 		square1id = square(m_physicsWorld, -50.f, 0.f, 20, 20, puzzleWall1);
-		int floor = kinematicPlat(10, 300, 30, -10, 2, 270);
-		int leftWall = kinematicPlat(10, 200, -125, 95, 2, 180);
-		int rightWall = kinematicPlat(10, 200, 170, 95, 2, 0);
-		int roof = kinematicPlat(10, 300, -10, 100, 2, 90);
-		int testCheck1 = makeCheckpoint("boxSprite.jpg", 10, 10, 60, -5);
-		int testCheck2 = makeCheckpoint("boxSprite.jpg", 10, 10, -40, -5);
-		int deathCheck = makeDeathObject("Boulder.png", 10, 10, 90, 10);
+		//int floor = kinematicPlat(10, 300, 30, -10, 2, 270);
+		//int leftWall = kinematicPlat(10, 200, -125, 95, 2, 180);
+		//int rightWall = kinematicPlat(10, 200, 170, 95, 2, 0);
+		//int roof = kinematicPlat(10, 300, -10, 100, 2, 90);
+		//int testCheck1 = makeCheckpoint("boxSprite.jpg", 10, 10, 60, -5);
+		//int testCheck2 = makeCheckpoint("boxSprite.jpg", 10, 10, -40, -5);
+		//int deathCheck = makeDeathObject("Boulder.png", 10, 10, 90, 10);
 		//int traslator = translateTrigger("boxSprite.jpg", 20, 20, 30, 10, 10, 0, startingPlat);
 		//bluePortal(30, 20, 0);
 		//orangePortal(100, 50, 270);
 		
-	*/
+
 	}
  
 	////Infinite Portal Loop
@@ -775,6 +778,38 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	//	NonPortPlat(10, 145, 208 + loopLevelx, 185 + loopLevely, 2, 90, "NonPortal Wall.png");
 	//	NonPortPlat(10, 30, 275 + loopLevelx, 165 + loopLevely, 2, 0, "NonPortal Wall.png");
 	//}
+	//Infinite Portal Loop
+	{/*
+		square1id = square(m_physicsWorld, -50.f + loopLevelx, 0.f + loopLevely, 20, 20, puzzleWall1);
+		int leftWall = kinematicPlat(10, 150, -18 + loopLevelx, 115 + loopLevely, 2, 180, "Portal Wall.png"); //Left Border Wall
+		kinematicPlat(10, 100, -18, 240 + loopLevelx, 2 + loopLevely, 180, "Portal Wall.png");
+		int floor = kinematicPlat(10, 150, 55 + loopLevelx, -10 + loopLevely, 2, 270, "Portal Wall.png");  //First Floor
+		int rightWall = kinematicPlat(10, 110, 132 + loopLevelx, 50 + loopLevely, 2, 0, "Portal Wall.png"); //Right Border Wall
+		NonPortPlat(10, 150, 202 + loopLevelx, 105 + loopLevely, 2, 90, "NonPortal Wall.png");
+		int roof = kinematicPlat(10, 100, 30 + loopLevelx, 285 + loopLevely, 2, 90, "Portal Wall.png");
+		NonPortPlat(10, 60, 110 + loopLevelx, 285 + loopLevely, 2, 90, "NonPortal Wall.png");
+		NonPortPlat(10, 100, 140 + loopLevelx, 235 + loopLevely, 2, 0, "NonPortal Wall.png");
+		NonPortPlat(10, 145, 208 + loopLevelx, 185 + loopLevely, 2, 90, "NonPortal Wall.png");
+		NonPortPlat(10, 30, 275 + loopLevelx, 165 + loopLevely, 2, 0, "NonPortal Wall.png");
+	*/}
+
+	//Momentum level
+	{
+		int floor1 = kinematicPlat(10, 80, 40, -10, 2, 270);
+		int pit_wall_L = kinematicPlat(10, 100, 85, -55, 2, 180);
+		int pit_wall_R = kinematicPlat(10, 100, 145, -55, 2, 0);
+		int pit1 = kinematicPlat(10, 60, 115, -105, 2, 270);
+		int momentumCheck = makeCheckpoint("boxSprite.jpg", 10, 10, 60, -5);
+		int floor2 = kinematicPlat(10, 50, 165, -10, 2, 270);
+		int wall1 = kinematicPlat(10, 60, 190, 25, 2, 0);
+		int floor_upper1 = kinematicPlat(10, 80, 230, 50, 2, 270);
+		int wall2 = kinematicPlat(10, 60, 270, 80, 2, 0);
+		int floor_upper2 = kinematicPlat(10, 80, 310, 105, 2, 270);
+		int roof1 = NonPortPlat(10, 150, 5, 120, 2, 180, "NonPortal Wall.png");
+		int roof2 = NonPortPlat(10, 350, 175, 195, 2, 90, "NonPortal Wall.png");
+		int roof3 = NonPortPlat(10, 50, 345, 170, 2, 0, "NonPortal Wall.png");
+	}
+
 
 		//Portal Gun
 	{

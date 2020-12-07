@@ -32,7 +32,7 @@ void PhysicsPlaygroundListener::BeginContact(b2Contact* contact)
 	b2Filter filterA = fixtureA->GetFilterData();
 	b2Filter filterB = fixtureB->GetFilterData();
 
-	if ((filterA.categoryBits == PLAYER && filterB.categoryBits == GROUND) || (filterB.categoryBits == PLAYER && filterA.categoryBits == GROUND))
+	if ((filterA.categoryBits == PLAYER && (filterB.categoryBits == GROUND)) || (filterB.categoryBits == PLAYER && filterA.categoryBits == GROUND) || (filterA.categoryBits == PLAYER && (filterB.categoryBits == ENVIRONMENT)) || (filterB.categoryBits == PLAYER && filterA.categoryBits == ENVIRONMENT))
 	{
 		if (filterA.categoryBits == PLAYER)
 		{
