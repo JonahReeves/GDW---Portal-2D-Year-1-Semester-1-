@@ -207,6 +207,12 @@
     <ClInclude Include="bPortalSpawnTrigger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="checkpointTrigger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="deathTrigger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationController.cpp">
@@ -390,6 +396,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="bPortalSpawnTrigger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="checkpointTrigger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="deathTrigger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

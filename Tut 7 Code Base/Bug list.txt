@@ -1,3 +1,3 @@
 Bug list:
 
-Touching a portal when the other color doesnt exist crashes the game
+Cubes cant go through portals on their own

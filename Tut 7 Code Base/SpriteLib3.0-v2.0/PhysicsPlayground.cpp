@@ -2,6 +2,8 @@
 #include "Utilities.h"
 #include "bPortalTrigger.h"
 #include "oPortalTrigger.h"
+#include "CheckpointTrigger.h"
+#include "deathTrigger.h"
 
 
 #include "FirePortal.h"
@@ -13,6 +15,7 @@ int bPortal;
 int oPortal;
 
 b2Vec2 activeProjDir;
+b2Vec2 respawnPoint = b2Vec2(0.f, 30.f);
 int portalSurface[200]; //MAX 200 WALLS IN THE GAME
 int portalSurfaceSize = 0;
 int activeProj;
@@ -91,6 +94,101 @@ bool PhysicsPlayground::oPortalExists()
 int PhysicsPlayground::getActiveProj()
 {
 	return activeProj;
+}
+
+void PhysicsPlayground::respawn()
+{
+	ECS::GetComponent<PhysicsBody>(playerId).SetPosition(respawnPoint, true);
+}
+
+void PhysicsPlayground::setRespawn(b2Vec2 newSpawn)
+{
+	respawnPoint = newSpawn;
+}
+
+int PhysicsPlayground::makeCheckpoint(std::string file, int fileLength, int fileWidth, float xVal, float yVal)
+{
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	ECS::AttachComponent<Trigger*>(entity);
+
+
+	//Sets up components
+	std::string fileName = file;
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileLength, fileWidth);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(xVal, yVal, 80.f));
+
+
+	ECS::GetComponent<Trigger*>(entity) = new CheckpointTrigger();
+	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+	((CheckpointTrigger*)ECS::GetComponent<Trigger*>(entity))->SetScene(this);
+	((CheckpointTrigger*)ECS::GetComponent<Trigger*>(entity))->setLoc(b2Vec2(xVal, yVal + 20)); //respawn location is set to where the checkpoint is
+	
+	
+
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(xVal), float32(yVal));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(fileLength), float(fileWidth), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+	tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+
+	return entity;
+}
+
+int PhysicsPlayground::makeDeathObject(std::string file, int fileLength, int fileWidth, float xVal, float yVal)
+{
+
+	//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+	ECS::AttachComponent<PhysicsBody>(entity);
+	ECS::AttachComponent<Trigger*>(entity);
+
+
+	//Sets up components
+	std::string fileName = file;
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, fileLength, fileWidth);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(xVal, yVal, 80.f));
+
+
+	ECS::GetComponent<Trigger*>(entity) = new deathTrigger();
+	ECS::GetComponent<Trigger*>(entity)->SetTriggerEntity(entity);
+	((deathTrigger*)ECS::GetComponent<Trigger*>(entity))->SetScene(this);
+	
+
+
+
+	auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+	float shrinkX = 0.f;
+	float shrinkY = 0.f;
+	b2Body* tempBody;
+	b2BodyDef tempDef;
+	tempDef.type = b2_staticBody;
+	tempDef.position.Set(float32(xVal), float32(yVal));
+
+	tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+	tempPhsBody = PhysicsBody(entity, tempBody, float(fileLength), float(fileWidth), vec2(0.f, 0.f), true, TRIGGER, PLAYER);
+	tempPhsBody.SetColor(vec4(1.f, 0.f, 0.f, 0.3f));
+
+	return entity;
 }
 
 int PhysicsPlayground::getContactSurface()
@@ -532,7 +630,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<HorizontalScroll>(entity);
 		ECS::AttachComponent<VerticalScroll>(entity);
 
-		vec4 temp = vec4(-75.f, 75.f, -75.f, 75.f);
+		vec4 temp = vec4(-150.f, 150.f, -150.f, 150.f);
 		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
@@ -596,6 +694,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		int leftWall = kinematicPlat(10, 200, -125, 95, 2, 180);
 		int rightWall = kinematicPlat(10, 200, 170, 95, 2, 0);
 		int roof = kinematicPlat(10, 300, -10, 100, 2, 90);
+		int testCheck1 = makeCheckpoint("boxSprite.jpg", 10, 10, 60, -5);
+		int testCheck2 = makeCheckpoint("boxSprite.jpg", 10, 10, -40, -5);
+		int deathCheck = makeDeathObject("Boulder.png", 10, 10, 90, 10);
 		//int traslator = translateTrigger("boxSprite.jpg", 20, 20, 30, 10, 10, 0, startingPlat);
 		//bluePortal(30, 20, 0);
 		//orangePortal(100, 50, 270);
@@ -938,6 +1039,26 @@ void PhysicsPlayground::KeyboardDown()
 	if (Input::GetKeyDown(Key::E) && playerx > (squarepositionx - 30) && playerx < (squarepositionx + 30) && playery >(squarepositiony - 30) && playery < (squarepositiony + 30))
 	{
 		squarepickup = true;
+	}
+
+	if (Input::GetKeyDown(Key::R)) //reset portals
+	{
+		if (bPortal != NULL) //Destroy previous portal
+		{
+			PhysicsBody::m_bodiesToDelete.push_back(bPortal);
+			bPortal = NULL;
+		}
+		if (oPortal != NULL) //Destroy previous portal
+		{
+			PhysicsBody::m_bodiesToDelete.push_back(oPortal);
+			oPortal = NULL;
+		}
+	}
+
+	if (Input::GetKeyDown(Key::Zero))
+	{
+		PhysicsPlayground::respawn();
+		
 	}
 
 

@@ -48,6 +48,10 @@ public:
 	static void resetActiveProj();
 	static bool bPortalExists();
 	static bool oPortalExists();
+	void respawn();
+	void setRespawn(b2Vec2 newSpawn);
+	int makeCheckpoint(std::string file, int fileLength, int fileWidth, float xVal, float yVal);
+	int makeDeathObject(std::string file, int fileLength, int fileWidth, float xVal, float yVal);
 	
 	
 
