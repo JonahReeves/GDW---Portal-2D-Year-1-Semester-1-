@@ -837,6 +837,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<CanJump>(entity);
 		ECS::AttachComponent<Player>(entity);
 		ECS::AttachComponent<AnimationController>(entity);
+		ECS::AttachComponent<XInputController>(entity);
 
 		//sets up the components
 		std::string fileName = "spritesheets/Atlas.png";
@@ -1381,17 +1382,19 @@ void PhysicsPlayground::KeyboardHold()
 	playerx = ECS::GetComponent<Transform>(playerId).GetPositionX();
 	playery = ECS::GetComponent<Transform>(playerId).GetPositionY();
 
+	ECS::GetComponent<XInputController>(playerId).PrintControllerInfo();
+
 	if (Input::GetKey(Key::Shift))
 	{
 		speed *= 5.f;
 	}
 
-	if (Input::GetKey(Key::A))
+	if (Input::GetKey(Key::A) || ECS::GetComponent<XInputController>(playerId).IsButtonStroked(DPAD_RIGHT))
 	{
 		player.GetBody()->ApplyForceToCenter(b2Vec2(-400000.f * speed, 0.f), true);
 		portalgunmove = true;
 	}
-	if (Input::GetKey(Key::D))
+	if (Input::GetKey(Key::D) || ECS::GetComponent<XInputController>(playerId).IsButtonStroked(DPAD_LEFT))
 	{
 		player.GetBody()->ApplyForceToCenter(b2Vec2(400000.f * speed, 0.f), true);
 		portalgunmove = true;
@@ -1434,7 +1437,7 @@ void PhysicsPlayground::KeyboardDown()
 	}
 	if (canJump.m_canJump)
 	{
-		if (Input::GetKeyDown(Key::Space))
+		if (Input::GetKeyDown(Key::Space) || ECS::GetComponent<XInputController>(playerId).IsButtonPressed(DPAD_UP))
 		{
 			if (!squarepickup) {
 				player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 160000.f), true);
