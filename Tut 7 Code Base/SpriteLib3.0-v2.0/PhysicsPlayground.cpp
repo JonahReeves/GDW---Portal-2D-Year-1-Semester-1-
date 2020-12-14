@@ -4,7 +4,7 @@
 #include "oPortalTrigger.h"
 #include "CheckpointTrigger.h"
 #include "deathTrigger.h"
-
+#include "EffectTrigger.h"
 
 
 #include "FirePortal.h"
@@ -53,6 +53,8 @@ int CompCubey = 235;
 int levelFPx = 2230;
 int levelFPy = 230;
 
+XInputController* tempCon;
+
 
 PhysicsPlayground::PhysicsPlayground(std::string name)
 	: Scene(name)
@@ -62,6 +64,11 @@ PhysicsPlayground::PhysicsPlayground(std::string name)
 	m_physicsWorld->SetGravity(m_gravity);
 
 	m_physicsWorld->SetContactListener(&listener);
+
+	if (XInputManager::ControllerConnected(0))
+	{
+		tempCon = XInputManager::GetController(0);
+	}
 	
 }
 
@@ -148,12 +155,14 @@ bool PhysicsPlayground::bPortalExists()
 		return true;
 	return false;
 }
+
 bool PhysicsPlayground::oPortalExists()
 {
 	if (oPortal != NULL)
 		return true;
 	return false;
 }
+
 int PhysicsPlayground::getActiveProj()
 {
 	return activeProj;
@@ -168,6 +177,8 @@ void PhysicsPlayground::setRespawn(b2Vec2 newSpawn)
 {
 	respawnPoint = newSpawn;
 }
+
+//void PhysicsPlayground::
 
 int PhysicsPlayground::makeCheckpoint(std::string file, int fileLength, int fileWidth, float xVal, float yVal)
 {
@@ -222,6 +233,7 @@ int PhysicsPlayground::makeDeathObject(std::string file, int fileLength, int fil
 	ECS::AttachComponent<Transform>(entity);
 	ECS::AttachComponent<PhysicsBody>(entity);
 	ECS::AttachComponent<Trigger*>(entity);
+	
 
 
 	//Sets up components
@@ -256,26 +268,23 @@ int PhysicsPlayground::makeDeathObject(std::string file, int fileLength, int fil
 
 int PhysicsPlayground::getContactSurface()
 {
-	/*
-	when projectile hits a wall,
-	scans this array to see what wall it hit by comparing location values,
-	then takes the angle of that wall and creates a portal of the correct color at that location with the same rotation angle as the wall it hit
-	*/
-	
+	//Placeholder values for comparing walls
 	float currentWallx;
 	float currentWally;
 	float currentDistance;
+	//Portal Projectiles coordinates
 	float projx = ECS::GetComponent<PhysicsBody>(activeProj).GetPosition().x;
 	float projy = ECS::GetComponent<PhysicsBody>(activeProj).GetPosition().y;
 
-	float closestDistance = 9999.f;
-	int closestWall;
+	float closestDistance = 9999.f; // Start with a max value so any distance will be shorter
+	int closestWall; //Holds entity of which wall is closest
 	for (int i = 0; i < portalSurfaceSize; i++)
 	{
 		currentWallx = ECS::GetComponent<PhysicsBody>(portalSurface[i]).GetPosition().x;
 		currentWally = ECS::GetComponent<PhysicsBody>(portalSurface[i]).GetPosition().y;
-
-		currentDistance = sqrt(((projx - currentWallx) * (projx - currentWallx)) + ((projy - currentWally) * (projy - currentWally)));
+		currentDistance = sqrt(((projx - currentWallx) * (projx - currentWallx)) +
+			((projy - currentWally) * (projy - currentWally)));
+		//Pythagorean to find distance
 		if (currentDistance < closestDistance)
 		{
 			closestWall = portalSurface[i];
@@ -316,21 +325,16 @@ void PhysicsPlayground::portalPhysics(int target, int entPortal, int exitPortal)
 	auto& targetPhsBody = ECS::GetComponent<PhysicsBody>(target);
 	auto& entPhysBody = ECS::GetComponent<PhysicsBody>(entPortal);
 	auto& exitPhysBody = ECS::GetComponent<PhysicsBody>(exitPortal);
-
 	//get angles
 	float entrancePortalAngle = entPhysBody.GetRotationAngleDeg();
 	float exitPortalAngle = exitPhysBody.GetRotationAngleDeg() + 180;
 	float rotationAngleDeg = exitPortalAngle - entrancePortalAngle;
 	float theta = (rotationAngleDeg * PI / 180); //convert to rad
-
-
 	//vector math
 	vec3 vec = targetPhsBody.GetVelocity();
-
 	float rotatedX = (cos(theta) * vec.x) - (sin(theta) * vec.y);
 	float rotatedY = (sin(theta) * vec.x) + (cos(theta) * vec.y);
 	vec3 rotatedVec = vec3(rotatedX, rotatedY, vec.z);
-
 	targetPhsBody.SetVelocity(rotatedVec);
 }
 
@@ -505,7 +509,6 @@ void PhysicsPlayground::bluePortal(float xVal, float yVal, float rotationAngleDe
 
 	bPortal = entity;
 }
-
 
 void PhysicsPlayground::orangePortal(float xVal, float yVal, float rotationAngleDeg)
 {
@@ -699,16 +702,23 @@ int PhysicsPlayground::portalProj(bool portalColor, float xVal, float yVal, floa
 		tempPhsBody.SetColor(vec4(1.f, 0.65f, 0.f, 0.3f));
 
 	tempPhsBody.SetRotationAngleDeg(directionAngle);
-	tempPhsBody.SetGravityScale(0.f);
+	
 
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 
+
+
+
 	activeProj = entity;
 
+	tempPhsBody.SetGravityScale(0.f);
 	float projSpeedMult = 100000.f;
-	activeProjDir = b2Vec2(cos(directionAngle * PI / 180) * projSpeedMult, sin(directionAngle * PI / 180) * projSpeedMult);
+	activeProjDir = b2Vec2(cos(directionAngle * PI / 180) * projSpeedMult, 
+		sin(directionAngle * PI / 180) * projSpeedMult);
 	ECS::GetComponent<PhysicsBody>(activeProj).GetBody()->SetLinearVelocity(activeProjDir);
+
+
 
 	return entity;
 }
@@ -1048,6 +1058,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		NonPortPlat(10, 30, 855 + CompCubex, 50 + CompCubey, 2, 0, "NonPortal Wall.png");//DoorBlock
 		NonPortPlat(10, 30, 875 + CompCubex, 50 + CompCubey, 2, 0, "NonPortal Wall.png");//DoorBlock
 		square1id = square(m_physicsWorld, 700.f + CompCubex, 0.f + CompCubey, 20, 20, puzzleWall1, "Companion Cube.png");//Companion Cube
+		
+
 		int CompanionDoor = dynamicPlat("door.png", 10, 80, 865 + CompCubex, 30 + CompCubey, 2, 0.0f, 0.0f); //door
 		int CompanionDoorUp = translateDoorsObjOnly("fire.png", 90, 45, 800 + CompCubex, 5 + CompCubey, 1, 2, CompanionDoor, 25000, 2, 0); //Incinerator
 		int comp_cubeCheck = makeCheckpoint("Checkpoint.png", 10, 10, 30 + CompCubex, 20 + CompCubey);
@@ -1353,6 +1365,8 @@ void PhysicsPlayground::GUIWindowTwo()
 
 
 
+
+
 void PhysicsPlayground::KeyboardHold()
 {
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
@@ -1535,6 +1549,12 @@ void PhysicsPlayground::Update()
 	portaloQueueCheck();
 	portalbQueueCheck();
 	
+
+
+	
+
+
+
 
 	auto& square1 = ECS::GetComponent<PhysicsBody>(square1id);
 	auto& square2 = ECS::GetComponent<PhysicsBody>(square2id);

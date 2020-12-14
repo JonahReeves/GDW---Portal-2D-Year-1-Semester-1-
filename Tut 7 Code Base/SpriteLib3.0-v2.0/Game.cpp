@@ -160,6 +160,8 @@ void Game::GamepadInput()
 			GamepadDown(tempCon);
 			GamepadStick(tempCon);
 			GamepadTrigger(tempCon);
+
+			//tempCon->PrintControllerInfo();
 		}
 	}
 }

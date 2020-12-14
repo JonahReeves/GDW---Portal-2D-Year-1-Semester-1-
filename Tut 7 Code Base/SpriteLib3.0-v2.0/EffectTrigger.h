@@ -3,10 +3,9 @@
 #include "ECS.h"
 #include "PhysicsPlayground.h"
 
-
 class PhysicsPlayground;
-class CheckpointTrigger :
-    public Trigger
+class EffectTrigger :
+	public Trigger
 {
 public:
 	void OnEnter() override;
@@ -14,15 +13,17 @@ public:
 
 	void SetScene(PhysicsPlayground* scene);
 
-	CheckpointTrigger() : Trigger() {
+	EffectTrigger() : Trigger() {
 
 	}
 
-	void setLoc(b2Vec2 vec);
+	
 	PhysicsPlayground* m_currScene;
-	b2Vec2 respawnLoc;
+	
 protected:
 
 	bool triggered = false;
 };
+
+
 

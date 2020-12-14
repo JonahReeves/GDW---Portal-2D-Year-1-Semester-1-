@@ -24,6 +24,10 @@ public:
 	void KeyboardHold() override;
 	void KeyboardDown() override;
 	void KeyboardUp() override;
+	
+	
+	
+
 
 	//custom stuff
 	int kinematicPlat(int fileLength, int fileWidth, float xVal, float yVal, float layerVal, float rotationAngleDeg = 0.0, std::string fileName = "Portal Wall.png");
