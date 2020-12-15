@@ -1370,6 +1370,12 @@ void PhysicsPlayground::GUIWindowTwo()
 
 void PhysicsPlayground::KeyboardHold()
 {
+	Triggers triggers;
+	Stick sticks[2];
+
+	tempCon->GetTriggers(triggers);
+	tempCon->GetSticks(sticks);
+
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	auto& portalgun = ECS::GetComponent<PhysicsBody>(MainEntities::PortalGun());
 
@@ -1389,12 +1395,12 @@ void PhysicsPlayground::KeyboardHold()
 		speed *= 5.f;
 	}
 
-	if (Input::GetKey(Key::A) || tempCon->IsButtonPressed(DPAD_LEFT))
+	if (Input::GetKey(Key::A) || tempCon->IsButtonPressed(DPAD_LEFT) || (sticks[0].x < -0.3f))
 	{
 		player.GetBody()->ApplyForceToCenter(b2Vec2(-400000.f * speed, 0.f), true);
 		portalgunmove = true;
 	}
-	if (Input::GetKey(Key::D) || tempCon->IsButtonPressed(DPAD_RIGHT))
+	if (Input::GetKey(Key::D) || tempCon->IsButtonPressed(DPAD_RIGHT) || (sticks[0].x > 0.3f))
 	{
 		player.GetBody()->ApplyForceToCenter(b2Vec2(400000.f * speed, 0.f), true);
 		portalgunmove = true;
@@ -1414,6 +1420,12 @@ void PhysicsPlayground::KeyboardHold()
 
 void PhysicsPlayground::KeyboardDown()
 {
+	Triggers triggers;
+	Stick sticks[2];
+
+	tempCon->GetTriggers(triggers);
+	tempCon->GetSticks(sticks);
+
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	auto& canJump = ECS::GetComponent<CanJump>(MainEntities::MainPlayer());
 	float playerx, playery, squarepositionx, squarepositiony;
@@ -1437,7 +1449,7 @@ void PhysicsPlayground::KeyboardDown()
 	}
 	if (canJump.m_canJump)
 	{
-		if (Input::GetKeyDown(Key::Space) || tempCon->IsButtonPressed(DPAD_UP))
+		if (Input::GetKeyDown(Key::Space) || tempCon->IsButtonPressed(DPAD_UP) || (sticks[0].y > 0.8f))
 		{
 			if (!squarepickup) {
 				player.GetBody()->ApplyLinearImpulseToCenter(b2Vec2(0.f, 160000.f), true);
@@ -1472,38 +1484,36 @@ void PhysicsPlayground::KeyboardDown()
 		
 	}
 
-
-
 	//angle portal guns
-	if (Input::GetKey(Key::UpArrow) && Input::GetKey(Key::LeftArrow))
+	if ((Input::GetKey(Key::UpArrow) && Input::GetKey(Key::LeftArrow)) || (sticks[1].x < -0.3f && sticks[1].y > 0.3f))
 	{
 		portalGunAngle = 135;
 	}
-	else if (Input::GetKey(Key::UpArrow) && Input::GetKey(Key::RightArrow))
+	else if ((Input::GetKey(Key::UpArrow) && Input::GetKey(Key::RightArrow)) || (sticks[1].x > 0.3f && sticks[1].y > 0.3f))
 	{
 		portalGunAngle = 45;
 	}
-	else if (Input::GetKey(Key::DownArrow) && Input::GetKey(Key::LeftArrow))
+	else if ((Input::GetKey(Key::DownArrow) && Input::GetKey(Key::LeftArrow)) || (sticks[1].x < -0.3f && sticks[1].y < -0.3f))
 	{
 		portalGunAngle = 225;
 	}
-	else if (Input::GetKey(Key::DownArrow) && Input::GetKey(Key::RightArrow))
+	else if ((Input::GetKey(Key::DownArrow) && Input::GetKey(Key::RightArrow)) || (sticks[1].x > 0.3f && sticks[1].y < -0.3f))
 	{
 		portalGunAngle = 315;
 	}
-	else if (Input::GetKey(Key::UpArrow))
+	else if ((Input::GetKey(Key::UpArrow)) || (sticks[1].y > 0.3f && (-0.3f <= sticks[1].x && sticks[1].x <= 0.3f)))
 	{
 		portalGunAngle = 90;
 	}
-	else if (Input::GetKey(Key::DownArrow))
+	else if ((Input::GetKey(Key::DownArrow)) || (sticks[1].y < -0.3f && (-0.3f <= sticks[1].x && sticks[1].y <= 0.3f)))
 	{
 		portalGunAngle = 270;
 	}
-	else if (Input::GetKey(Key::LeftArrow))
+	else if ((Input::GetKey(Key::LeftArrow)) || (sticks[1].x < -0.3f && (-0.3f <= sticks[1].y && sticks[1].y <= 0.3f)))
 	{
 		portalGunAngle = 180;
 	}
-	else if (Input::GetKey(Key::RightArrow))
+	else if ((Input::GetKey(Key::RightArrow)) || (sticks[1].x > 0.3f && (-0.3f <= sticks[1].y && sticks[1].y <= 0.3f)))
 	{
 		portalGunAngle = 0;
 	}
@@ -1511,12 +1521,12 @@ void PhysicsPlayground::KeyboardDown()
 	
 
 	//spawn portals
-	if (Input::GetKeyDown(Key::Q)) //Blue 
+	if (Input::GetKeyDown(Key::Q) || triggers.LT >= 0.1f) //Blue 
 	{
 		portalProj(true, playerx, playery, portalGunAngle);
 		//bluePortal(playerx +20, playery, 0);
 	}
-	if (Input::GetKeyDown(Key::E)) //Orange
+	if (Input::GetKeyDown(Key::E) || triggers.RT >= 0.1f) //Orange
 	{
 		portalProj(false, playerx, playery, portalGunAngle);
 		//orangePortal(playerx - 20, playery, 0);

@@ -75,15 +75,23 @@ void Player::Update()
 
 void Player::MovementUpdate()
 {
+	XInputController* tempCon = XInputManager::GetController(0);
+
+	Triggers triggers;
+	Stick sticks[2];
+
+	tempCon->GetTriggers(triggers);
+	tempCon->GetSticks(sticks);
+
 	m_moving = false;
 	m_attacking = false;
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 
-	if (Input::GetKey(Key::A))
+	if (Input::GetKey(Key::A) || tempCon->IsButtonPressed(DPAD_LEFT) || (sticks[0].x < -0.3f))
 	{
 		m_facing = LEFT;
 	}
-	if (Input::GetKey(Key::D))
+	if (Input::GetKey(Key::D) || tempCon->IsButtonPressed(DPAD_RIGHT) || (sticks[0].x > 0.3f))
 	{
 		m_facing = RIGHT;
 	}
